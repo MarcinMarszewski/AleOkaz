@@ -43,7 +43,8 @@ public class ImageService {
             throw new IOException("Invalid image file");
         }
 
-        BufferedImage rgbImage = new BufferedImage(bufferedImage.getWidth(), bufferedImage.getHeight(), BufferedImage.TYPE_INT_RGB);
+        BufferedImage rgbImage = new BufferedImage(bufferedImage.getWidth(), bufferedImage.getHeight(),
+                BufferedImage.TYPE_INT_RGB);
 
         Graphics2D graphics = rgbImage.createGraphics();
         try {
@@ -59,7 +60,6 @@ public class ImageService {
 
         return domainUrl + "/images/" + filename;
     }
-
 
     public String saveProfilePicture(MultipartFile profilePicture) throws IOException {
         File directory = new File(profilePictureUploadDir);
@@ -77,10 +77,9 @@ public class ImageService {
         }
 
         BufferedImage rgbImage = new BufferedImage(
-            originalImage.getWidth(),
-            originalImage.getHeight(),
-            BufferedImage.TYPE_INT_RGB
-        );
+                originalImage.getWidth(),
+                originalImage.getHeight(),
+                BufferedImage.TYPE_INT_RGB);
 
         Graphics2D graphics = (Graphics2D) rgbImage.getGraphics();
         try {

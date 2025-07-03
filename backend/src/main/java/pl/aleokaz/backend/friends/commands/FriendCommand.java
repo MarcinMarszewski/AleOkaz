@@ -1,4 +1,4 @@
-package pl.aleokaz.backend.friends;
+package pl.aleokaz.backend.friends.commands;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
@@ -8,7 +8,7 @@ import lombok.NonNull;
 @Data
 @Builder
 public class FriendCommand {
-    private Void _privateFieldThatShouldBeLeftIgnoredBecauseRequestBodyDoesntWorkPropperlyWithClassesWithOneField;
+    private Void _emptyField;
 
     @NonNull
     @NotBlank

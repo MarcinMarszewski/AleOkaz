@@ -1,4 +1,4 @@
-package pl.aleokaz.backend.recovery;
+package pl.aleokaz.backend.recovery.commands;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;

@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import pl.aleokaz.backend.recovery.commands.CheckTokenCommand;
+import pl.aleokaz.backend.recovery.commands.RecoveryCommand;
+import pl.aleokaz.backend.recovery.commands.ResetPasswordCommand;
+
 @RestController
 @RequestMapping("/api/recovery")
 public class RecoveryController {

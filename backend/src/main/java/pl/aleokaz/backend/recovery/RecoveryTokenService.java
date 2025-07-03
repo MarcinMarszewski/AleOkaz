@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import pl.aleokaz.backend.recovery.commands.CheckTokenCommand;
+import pl.aleokaz.backend.recovery.commands.RecoveryCommand;
 import pl.aleokaz.backend.user.User;
 import pl.aleokaz.backend.user.UserNotFoundException;
 import pl.aleokaz.backend.user.UserRepository;

@@ -19,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
+import pl.aleokaz.backend.friends.commands.FriendCommand;
 import pl.aleokaz.backend.user.User;
 import pl.aleokaz.backend.user.UserNotFoundException;
 import pl.aleokaz.backend.user.UserRepository;
@@ -60,16 +61,16 @@ class FriendsServiceTest {
     void shouldAddFriendWhenFriendshipDoesNotExist() throws UserNotFoundException {
         when(friendshipRepository.findSymmetricalFriendship(mockUser.id(), mockFriend.id())).thenReturn(Optional.empty());
 
-        FriendCommand friendCommand = new FriendCommand(null, "someFriend");
+        FriendCommand friendCommand = FriendCommand.builder().username("someFriend").build();
         var result = friendsService.addFriend(friendCommand, userId);
 
         assertThat(result).isEqualTo(FriendsService.FriendStatus.SENT_FRIEND_REQUEST);
         verify(friendshipRepository).save(any(Friendship.class));
     }
 
-        @Test
+    @Test
     void shouldNotAddFriendWhenSameUser() throws UserNotFoundException {
-        FriendCommand friendCommand = new FriendCommand(null, "myself");
+        FriendCommand friendCommand = FriendCommand.builder().username("myself").build();
         var result = friendsService.addFriend(friendCommand, userId);
 
         assertThat(result).isEqualTo(FriendsService.FriendStatus.TRIED_TO_ADD_YOURSELF);
@@ -82,7 +83,7 @@ class FriendsServiceTest {
         var friendship = new Friendship(mockUser, mockFriend, true);
         when(friendshipRepository.findSymmetricalFriendship(mockUser.id(), mockFriend.id())).thenReturn(Optional.of(friendship));
 
-        FriendCommand friendCommand = new FriendCommand(null, "someFriend");
+        FriendCommand friendCommand = FriendCommand.builder().username("someFriend").build();
         var result = friendsService.removeFriend(friendCommand, userId);
 
         assertThat(result).isEqualTo(FriendsService.FriendStatus.FRIEND_REMOVED);
@@ -94,7 +95,7 @@ class FriendsServiceTest {
     void shouldReturnNoFriendshipWhenRemovingUnknownFriend() throws UserNotFoundException {
         when(friendshipRepository.findSymmetricalFriendship(mockUser.id(), mockFriend.id())).thenReturn(Optional.empty());
 
-        FriendCommand friendCommand = new FriendCommand(null, "someFriend");
+        FriendCommand friendCommand = FriendCommand.builder().username("unknownFriend").build();
         var result = friendsService.removeFriend(friendCommand, userId);
 
         assertThat(result).isEqualTo(FriendsService.FriendStatus.NO_FRIENDSHIP_TO_REMOVE);

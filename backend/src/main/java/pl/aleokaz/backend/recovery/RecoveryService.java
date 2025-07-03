@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 
 import pl.aleokaz.backend.user.UserRepository;
 import pl.aleokaz.backend.mail.MailingService;
+import pl.aleokaz.backend.recovery.commands.CheckTokenCommand;
+import pl.aleokaz.backend.recovery.commands.RecoveryCommand;
+import pl.aleokaz.backend.recovery.commands.ResetPasswordCommand;
 import pl.aleokaz.backend.user.User;
 import pl.aleokaz.backend.user.UserNotFoundException;
 

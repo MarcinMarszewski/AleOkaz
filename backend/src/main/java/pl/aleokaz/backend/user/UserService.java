@@ -58,6 +58,19 @@ public class UserService {
         this.imageService = imageService;
     }
 
+    public User getUserByUsername(@NonNull String username) {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new UserNotFoundException("username", username);
+        }
+        return user;
+    }
+
+    public User getUserById(@NonNull UUID id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
+    }
+
     /**
      * Zwraca użytkownika na podstawie id.
      *

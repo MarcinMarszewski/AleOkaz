@@ -1,4 +1,4 @@
-package pl.aleokaz.backend.recovery;
+package pl.aleokaz.backend.recovery.commands;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
@@ -8,8 +8,7 @@ import lombok.NonNull;
 @Data
 @Builder
 public class RecoveryCommand {
-    //Sorry, I had to do this
-    private Void _privateFieldThatShouldBeLeftIgnoredBecauseRequestBodyDoesntWorkPropperlyWithClassesWithOneField;
+    private Void _emptyField;
 
     @NonNull
     @NotBlank
