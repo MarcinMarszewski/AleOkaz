@@ -11,8 +11,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import pl.aleokaz.backend.post.PostDto;
-import pl.aleokaz.backend.post.ImageSaveException;
+import pl.aleokaz.backend.register.RegisterCommand;
+import pl.aleokaz.backend.image.ImageSaveException;
+import pl.aleokaz.backend.login.LoginCommand;
+import pl.aleokaz.backend.login.LoginResponse;
 
 // TODO(michalciechan): Obsługa wyjątków.
 @RestController

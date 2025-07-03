@@ -5,8 +5,9 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.stereotype.Service;
 
 import pl.aleokaz.backend.user.UserRepository;
-import pl.aleokaz.backend.exceptions.UserNotFoundException;
+import pl.aleokaz.backend.mail.MailingService;
 import pl.aleokaz.backend.user.User;
+import pl.aleokaz.backend.user.UserNotFoundException;
 
 @Service
 public class RecoveryService {
@@ -15,7 +16,7 @@ public class RecoveryService {
 
     @Autowired
     private UserRepository userRepository;
-    
+
     @Autowired
     private TokenRepository tokenRepository;
 
@@ -53,7 +54,7 @@ public class RecoveryService {
             RecoveryToken recoveryToken = tokenRepository.findByUserId(user.id());
             tokenRepository.delete(recoveryToken);
             return true;
-        } 
+        }
         return false;
     }
 }

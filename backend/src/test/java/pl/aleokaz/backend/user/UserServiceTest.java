@@ -12,6 +12,10 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Value;
 
+import pl.aleokaz.backend.register.RegisterCommand;
+import pl.aleokaz.backend.security.JwtTokenProvider;
+import pl.aleokaz.backend.security.VerificationRepository;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;

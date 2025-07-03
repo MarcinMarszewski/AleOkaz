@@ -1,4 +1,4 @@
-package pl.aleokaz.backend.user;
+package pl.aleokaz.backend.security;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

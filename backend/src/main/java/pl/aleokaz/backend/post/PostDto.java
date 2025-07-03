@@ -2,8 +2,10 @@ package pl.aleokaz.backend.post;
 
 import lombok.Builder;
 import lombok.NonNull;
+import pl.aleokaz.backend.comment.CommentDto;
 import pl.aleokaz.backend.fishingspot.FishingSpot;
 import pl.aleokaz.backend.fishingspot.FishingSpotDto;
+import pl.aleokaz.backend.reaction.ReactionsDto;
 
 import java.util.Date;
 import java.util.Set;

@@ -10,6 +10,9 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import pl.aleokaz.backend.reaction.ReactionCommand;
+import pl.aleokaz.backend.reaction.ReactionService;
+import pl.aleokaz.backend.reaction.ReactionType;
 import pl.aleokaz.backend.user.User;
 import pl.aleokaz.backend.user.UserRepository;
 

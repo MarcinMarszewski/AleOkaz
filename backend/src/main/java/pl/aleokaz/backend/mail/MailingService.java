@@ -1,4 +1,4 @@
-package pl.aleokaz.backend.recovery;
+package pl.aleokaz.backend.mail;
 
 import io.micrometer.common.lang.NonNull;
 import lombok.Builder;

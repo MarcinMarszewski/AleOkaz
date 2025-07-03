@@ -2,7 +2,6 @@ package pl.aleokaz.backend.fishingspot;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.NonNull;
 
 @Data
 @Builder

@@ -1,5 +1,7 @@
 package pl.aleokaz.backend.post;
 
+import pl.aleokaz.backend.comment.Comment;
+import pl.aleokaz.backend.reaction.Reaction;
 import pl.aleokaz.backend.user.User;
 
 import jakarta.persistence.CascadeType;

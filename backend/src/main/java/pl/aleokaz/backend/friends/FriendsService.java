@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import pl.aleokaz.backend.exceptions.UserNotFoundException;
 import pl.aleokaz.backend.user.User;
+import pl.aleokaz.backend.user.UserNotFoundException;
 import pl.aleokaz.backend.user.UserRepository;
 
 @Service
@@ -36,7 +36,7 @@ public class FriendsService {
 
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
-    
+
     public FriendStatus addFriend(FriendCommand addFriendCommand, UUID userId) throws UserNotFoundException {
         String friendUsername = addFriendCommand.username();
         User friend = userRepository.findByUsername(friendUsername);
@@ -52,7 +52,7 @@ public class FriendsService {
             kafkaTemplate.send(friend.id().toString(), "Friend request from " + user.username());
             return FriendStatus.SENT_FRIEND_REQUEST;
         }
-        Friendship friendship = existingFriendship.get(); 
+        Friendship friendship = existingFriendship.get();
         if (friendship.friend().id() == userId){
             if(friendship.isActive()) return FriendStatus.FRIENDSHIP_ALREADY_ACCEPTED;
             friendship.isActive(true);

@@ -18,6 +18,10 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import pl.aleokaz.backend.comment.Comment;
+import pl.aleokaz.backend.comment.CommentRepository;
+import pl.aleokaz.backend.comment.CommentService;
+import pl.aleokaz.backend.comment.CreateCommentCommand;
 import pl.aleokaz.backend.user.User;
 import pl.aleokaz.backend.user.UserRepository;
 

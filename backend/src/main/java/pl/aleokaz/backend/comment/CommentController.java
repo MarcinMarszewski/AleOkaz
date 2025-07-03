@@ -1,6 +1,9 @@
-package pl.aleokaz.backend.post;
+package pl.aleokaz.backend.comment;
 
-import pl.aleokaz.backend.user.AuthorizationException;
+import pl.aleokaz.backend.reaction.ReactionCommand;
+import pl.aleokaz.backend.reaction.ReactionService;
+import pl.aleokaz.backend.reaction.ReactionType;
+import pl.aleokaz.backend.security.AuthorizationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

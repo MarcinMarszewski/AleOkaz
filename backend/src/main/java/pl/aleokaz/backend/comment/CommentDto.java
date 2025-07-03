@@ -1,7 +1,8 @@
-package pl.aleokaz.backend.post;
+package pl.aleokaz.backend.comment;
 
 import lombok.Builder;
 import lombok.NonNull;
+import pl.aleokaz.backend.reaction.ReactionsDto;
 
 import java.util.Set;
 import java.util.Date;

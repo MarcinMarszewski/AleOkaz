@@ -1,7 +1,9 @@
 package pl.aleokaz.backend.post;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import pl.aleokaz.backend.fishingspot.FishingSpotMapper;
+import pl.aleokaz.backend.comment.Comment;
+import pl.aleokaz.backend.comment.CommentDto;
+import pl.aleokaz.backend.reaction.Reaction;
+import pl.aleokaz.backend.reaction.ReactionsDto;
 import pl.aleokaz.backend.user.User;
 
 import java.util.HashSet;

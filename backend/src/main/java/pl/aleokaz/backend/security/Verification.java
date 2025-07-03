@@ -1,9 +1,9 @@
-package pl.aleokaz.backend.user;
+package pl.aleokaz.backend.security;
 
 import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
-
+import pl.aleokaz.backend.user.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

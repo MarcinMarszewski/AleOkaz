@@ -1,4 +1,4 @@
-package pl.aleokaz.backend.post;
+package pl.aleokaz.backend.reaction;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

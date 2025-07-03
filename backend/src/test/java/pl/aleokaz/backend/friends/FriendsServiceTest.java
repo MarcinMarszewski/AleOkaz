@@ -19,8 +19,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
-import pl.aleokaz.backend.exceptions.UserNotFoundException;
 import pl.aleokaz.backend.user.User;
+import pl.aleokaz.backend.user.UserNotFoundException;
 import pl.aleokaz.backend.user.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -53,7 +53,7 @@ class FriendsServiceTest {
         when(userRepository.findByUsername("someFriend")).thenReturn(mockFriend);
         when(userRepository.findByUsername("myself")).thenReturn(mockUser);
         when(mockUser.id()).thenReturn(userId);
-        when(mockFriend.id()).thenReturn(friendId);  
+        when(mockFriend.id()).thenReturn(friendId);
     }
 
     @Test
@@ -88,7 +88,7 @@ class FriendsServiceTest {
         assertThat(result).isEqualTo(FriendsService.FriendStatus.FRIEND_REMOVED);
         verify(friendshipRepository).delete(friendship);
     }
-        
+
 
     @Test
     void shouldReturnNoFriendshipWhenRemovingUnknownFriend() throws UserNotFoundException {

@@ -1,4 +1,4 @@
-package pl.aleokaz.backend.post;
+package pl.aleokaz.backend.image;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

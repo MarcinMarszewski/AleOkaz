@@ -6,7 +6,8 @@ import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.aleokaz.backend.user.AuthorizationException;
+
+import pl.aleokaz.backend.security.AuthorizationException;
 import pl.aleokaz.backend.user.UserRepository;
 
 import java.util.List;

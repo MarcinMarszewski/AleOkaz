@@ -6,11 +6,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.transaction.Transactional;
 import lombok.NonNull;
-import pl.aleokaz.backend.fishingspot.FishingSpot;
 import pl.aleokaz.backend.fishingspot.FishingSpotRepository;
-import pl.aleokaz.backend.user.User;
+import pl.aleokaz.backend.image.ImageSaveException;
+import pl.aleokaz.backend.image.ImageService;
+import pl.aleokaz.backend.security.AuthorizationException;
 import pl.aleokaz.backend.user.UserRepository;
-import pl.aleokaz.backend.user.AuthorizationException;
 
 import java.io.IOException;
 import java.util.Date;

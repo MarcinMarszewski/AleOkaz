@@ -2,7 +2,6 @@ package pl.aleokaz.backend.user;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -12,8 +11,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.NonNull;
 import org.springframework.web.multipart.MultipartFile;
-import pl.aleokaz.backend.post.ImageSaveException;
-import pl.aleokaz.backend.post.ImageService;
+
+import pl.aleokaz.backend.image.ImageSaveException;
+import pl.aleokaz.backend.image.ImageService;
+import pl.aleokaz.backend.login.LoginCommand;
+import pl.aleokaz.backend.login.LoginResponse;
+import pl.aleokaz.backend.register.RegisterCommand;
+import pl.aleokaz.backend.security.JwtTokenProvider;
+import pl.aleokaz.backend.security.Verification;
+import pl.aleokaz.backend.security.VerificationRepository;
 
 import java.io.IOException;
 import java.security.SecureRandom;

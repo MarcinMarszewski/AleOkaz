@@ -1,5 +1,6 @@
-package pl.aleokaz.backend.post;
+package pl.aleokaz.backend.reaction;
 
+import pl.aleokaz.backend.post.InteractionRepository;
 import pl.aleokaz.backend.user.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;

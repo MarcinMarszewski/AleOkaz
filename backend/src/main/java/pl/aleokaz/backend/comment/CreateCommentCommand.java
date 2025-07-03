@@ -1,4 +1,4 @@
-package pl.aleokaz.backend.post;
+package pl.aleokaz.backend.comment;
 
 import java.util.UUID;
 

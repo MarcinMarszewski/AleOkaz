@@ -1,5 +1,6 @@
-package pl.aleokaz.backend.post;
+package pl.aleokaz.backend.reaction;
 
+import pl.aleokaz.backend.post.Interaction;
 import pl.aleokaz.backend.user.User;
 
 import jakarta.persistence.Entity;

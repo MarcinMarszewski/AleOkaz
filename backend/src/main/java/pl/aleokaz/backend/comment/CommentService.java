@@ -1,7 +1,9 @@
-package pl.aleokaz.backend.post;
+package pl.aleokaz.backend.comment;
 
-import pl.aleokaz.backend.exceptions.UserNotFoundException;
-import pl.aleokaz.backend.user.AuthorizationException;
+import pl.aleokaz.backend.post.InteractionMapper;
+import pl.aleokaz.backend.post.InteractionRepository;
+import pl.aleokaz.backend.security.AuthorizationException;
+import pl.aleokaz.backend.user.UserNotFoundException;
 import pl.aleokaz.backend.user.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +74,7 @@ public class CommentService {
         }
 
         // TODO: Nie usuwać podkomentarzy tylko zrobić coś (ale co?).
+        // > wyświetlać komentarz i uzytkownika jako puste?
         commentRepository.delete(comment);
     }
 }

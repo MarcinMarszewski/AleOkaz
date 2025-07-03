@@ -9,6 +9,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
+import pl.aleokaz.backend.register.RegisterCommand;
+
 @Component
 public class AdminUserSeeder implements ApplicationListener<ContextRefreshedEvent> {
     private final static Logger LOGGER = LoggerFactory.getLogger(AdminUserSeeder.class);
