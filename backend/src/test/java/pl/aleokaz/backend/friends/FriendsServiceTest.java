@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,17 +26,12 @@ import org.springframework.kafka.core.KafkaTemplate;
 import pl.aleokaz.backend.friends.commands.FriendCommand;
 import pl.aleokaz.backend.user.User;
 import pl.aleokaz.backend.user.UserNotFoundException;
-import pl.aleokaz.backend.user.UserRepository;
 import pl.aleokaz.backend.user.UserRole;
 import pl.aleokaz.backend.user.UserService;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class FriendsServiceTest {
-
-    @Mock
-    private UserRepository userRepository;
-
     @Mock
     private UserService userService;
 
@@ -68,7 +64,7 @@ class FriendsServiceTest {
         when(userService.getUserByUsername("friendUser")).thenReturn(mockFriend);
 
         when(kafkaTemplate.send(any(String.class), any(String.class)))
-                .thenReturn(null);
+                .thenReturn(CompletableFuture.completedFuture(null));
     }
 
     @Test
@@ -164,7 +160,7 @@ class FriendsServiceTest {
     }
 
     @Test
-    void shouldDoNothingWhenFrienshipAlreadyAccepted() throws UserNotFoundException {
+    void shouldDoNothingWhenFriendshipAlreadyAccepted() throws UserNotFoundException {
         Friendship friendship = new Friendship(mockFriend, mockUser, true);
         when(friendshipRepository.findSymmetricalFriendship(mockUser.id(), mockFriend.id()))
                 .thenReturn(Optional.of(friendship));
