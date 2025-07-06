@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 import pl.aleokaz.backend.recovery.commands.CheckTokenCommand;
 import pl.aleokaz.backend.recovery.commands.RecoveryCommand;
 import pl.aleokaz.backend.recovery.commands.ResetPasswordCommand;
+import pl.aleokaz.backend.util.ResponseMsgDTO;
 
+//TODO: Add error handling with @ControllerAdvice
 @RestController
 @RequestMapping("/api/recovery")
 public class RecoveryController {
@@ -18,38 +20,20 @@ public class RecoveryController {
     private RecoveryService recoveryService;
 
     @PostMapping
-    public ResponseEntity<ResponseMsgDto> createAndSendRecoveryToken(@RequestBody RecoveryCommand recoveryCommand) {
-        try {
-            recoveryService.createAndSendRecoveryToken(recoveryCommand);
-            return ResponseEntity.ok().body(ResponseMsgDto.builder().message("Recovery code sent.").build());
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(ResponseMsgDto.builder().message("An issue occured while generating recovery code.").build());
-        }
+    public ResponseEntity<ResponseMsgDTO> createAndSendRecoveryToken(@RequestBody RecoveryCommand recoveryCommand) {
+        recoveryService.createAndSendRecoveryToken(recoveryCommand);
+        return ResponseEntity.ok().body(ResponseMsgDTO.builder().message("Recovery code sent.").build());
     }
 
     @PostMapping("/verifyToken")
-    public ResponseEntity<ResponseMsgDto> verifyRecoveryToken(@RequestBody CheckTokenCommand checkTokenCommand) {
-        try {
-            if(recoveryService.verifyRecoveryToken(checkTokenCommand)) {
-                return ResponseEntity.ok().body(ResponseMsgDto.builder().message("Recovery code verified.").build());
-            } else {
-                return ResponseEntity.badRequest().body(ResponseMsgDto.builder().message("Recovery code could not be verified.").build());
-            }
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(ResponseMsgDto.builder().message("An issue occured while verifying recovry code.").build());
-        }
+    public ResponseEntity<ResponseMsgDTO> verifyRecoveryToken(@RequestBody CheckTokenCommand checkTokenCommand) {
+        recoveryService.verifyRecoveryToken(checkTokenCommand);
+        return ResponseEntity.ok().body(ResponseMsgDTO.builder().message("Recovery code verified.").build());
     }
 
     @PostMapping("/resetPassword")
-    public ResponseEntity<ResponseMsgDto> resetPassword(@RequestBody ResetPasswordCommand resetPasswordCommand) {
-        try {
-            if(recoveryService.resetPassword(resetPasswordCommand)) {
-                return ResponseEntity.ok().body(ResponseMsgDto.builder().message("Password reset.").build());
-            } else {
-                return ResponseEntity.badRequest().body(ResponseMsgDto.builder().message("Password could not be reset.").build());
-            }
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(ResponseMsgDto.builder().message("An issue occured while reseting the password.").build());
-        }
+    public ResponseEntity<ResponseMsgDTO> resetPassword(@RequestBody ResetPasswordCommand resetPasswordCommand) {
+        recoveryService.resetPassword(resetPasswordCommand);
+        return ResponseEntity.ok().body(ResponseMsgDTO.builder().message("Password reset.").build());
     }
 }

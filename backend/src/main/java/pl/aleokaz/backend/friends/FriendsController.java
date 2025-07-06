@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import pl.aleokaz.backend.friends.commands.FriendCommand;
-import pl.aleokaz.backend.recovery.ResponseMsgDto;
 import pl.aleokaz.backend.security.AuthenticationService;
+import pl.aleokaz.backend.util.ResponseMsgDTO;
 
 //TODO: Add error handling with @ControllerAdvice
 @RestController
@@ -44,23 +44,23 @@ public class FriendsController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<ResponseMsgDto> addFriend(Authentication authentication, @RequestBody FriendCommand addFriendCommand) {
+    public ResponseEntity<ResponseMsgDTO> addFriend(Authentication authentication, @RequestBody FriendCommand addFriendCommand) {
         UUID currentUserId = authenticationService.getCurrentUserId(authentication);
         FriendsService.FriendStatus status = friendsService.addFriend(addFriendCommand, currentUserId);
-        return ResponseEntity.ok().body(ResponseMsgDto.builder().message(status.name()).build());
+        return ResponseEntity.ok().body(ResponseMsgDTO.builder().message(status.name()).build());
     }
 
     @PostMapping("/remove")
-    public ResponseEntity<ResponseMsgDto> removeFriends(Authentication authentication, @RequestBody FriendCommand removeFriendCommand) {
+    public ResponseEntity<ResponseMsgDTO> removeFriends(Authentication authentication, @RequestBody FriendCommand removeFriendCommand) {
         UUID currentUserId = authenticationService.getCurrentUserId(authentication);
         FriendsService.FriendStatus status =  friendsService.removeFriend(removeFriendCommand, currentUserId);
-        return ResponseEntity.ok().body(ResponseMsgDto.builder().message(status.name()).build());
+        return ResponseEntity.ok().body(ResponseMsgDTO.builder().message(status.name()).build());
     }
 
     @PostMapping("/deleterequest")
-    public ResponseEntity<ResponseMsgDto> deleteFriendRequest(Authentication authentication, @RequestBody FriendCommand removeFriendCommand) {
+    public ResponseEntity<ResponseMsgDTO> deleteFriendRequest(Authentication authentication, @RequestBody FriendCommand removeFriendCommand) {
         UUID currentUserId = authenticationService.getCurrentUserId(authentication);
         FriendsService.FriendStatus status =  friendsService.deleteFriendRequest(removeFriendCommand, currentUserId);
-        return ResponseEntity.ok().body(ResponseMsgDto.builder().message(status.name()).build());
+        return ResponseEntity.ok().body(ResponseMsgDTO.builder().message(status.name()).build());
     }
 }

@@ -1,4 +1,4 @@
-package pl.aleokaz.backend.recovery;
+package pl.aleokaz.backend.recovery.exceptions;
 
 public class TokenNotFoundException extends RuntimeException {
     public TokenNotFoundException(String field, String value) {

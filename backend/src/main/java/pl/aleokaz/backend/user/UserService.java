@@ -71,6 +71,21 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
 
+    public User getUserByEmail(@NonNull String email) {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new UserNotFoundException("email", email);
+        }
+        return user;
+    }
+
+    public void setUserPassword(@NonNull User user, @NonNull String password) {
+        final var passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        final var encodedPassword = passwordEncoder.encode(String.valueOf(password));
+        user.password(encodedPassword);
+        userRepository.save(user);
+    }
+
     /**
      * Zwraca użytkownika na podstawie id.
      *
