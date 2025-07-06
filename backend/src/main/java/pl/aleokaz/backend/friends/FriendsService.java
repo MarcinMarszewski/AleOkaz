@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import pl.aleokaz.backend.friends.commands.FriendCommand;
 import pl.aleokaz.backend.user.User;
 import pl.aleokaz.backend.user.UserNotFoundException;
-import pl.aleokaz.backend.user.UserRepository;
 import pl.aleokaz.backend.user.UserService;
 
 @Service
