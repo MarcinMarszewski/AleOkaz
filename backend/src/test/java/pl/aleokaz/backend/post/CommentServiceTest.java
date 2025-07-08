@@ -32,7 +32,7 @@ public class CommentServiceTest {
     @InjectMocks
     private CommentService commentService;
 
-    @Spy
+    @Mock
     private InteractionMapper interactionMapper;
 
     @Mock
@@ -52,6 +52,7 @@ public class CommentServiceTest {
                 .email("user@example.com")
                 .password("")
                 .roles(new HashSet<>())
+                .profilePicture("empty")
                 .build();
         final var post = Post.builder()
                 .id(UUID.randomUUID())

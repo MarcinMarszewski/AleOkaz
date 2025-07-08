@@ -1,8 +1,8 @@
 package pl.aleokaz.backend.comment;
 
 import pl.aleokaz.backend.interaction.Interaction;
-import pl.aleokaz.backend.interaction.InteractionMapper;
 import pl.aleokaz.backend.reaction.Reaction;
+import pl.aleokaz.backend.reaction.ReactionsDto;
 import pl.aleokaz.backend.user.User;
 
 import jakarta.persistence.*;
@@ -13,16 +13,11 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 public class Comment extends Interaction {
-    @Autowired
-    private static InteractionMapper interactionMapper;
-
     @NonNull
     @ManyToOne(optional = false)
     @EqualsAndHashCode.Exclude
@@ -49,13 +44,25 @@ public class Comment extends Interaction {
             comments.add(subcomment.asCommentDto());
         }
 
+        final var reactionsDto = new ReactionsDto();
+
+        for (final var reaction : reactions()) {
+            if (reaction.author().equals(author())) {
+                reactionsDto.userReaction(reaction.type());
+            }
+
+            switch (reaction.type()) {
+                case LIKE -> reactionsDto.likes(reactionsDto.likes() + 1);
+            }
+        }
+
         return CommentDTO.builder()
                 .id(id())
                 .content(content())
                 .createdAt(createdAt())
                 .editedAt(editedAt())
                 .authorId(author().id())
-                .reactions(interactionMapper.convertReactionsToReactionsDto(reactions(), author()))
+                .reactions(reactionsDto)
                 .comments(comments)
                 .build();
     }
