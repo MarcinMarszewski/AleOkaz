@@ -22,6 +22,9 @@ public class RecoveryService {
     @Value("${recovery.token.expiration.minutes}")
     private int tokenExpirationMinutes;
 
+    @Value("${recovery.token.attempts}")
+    private int tokenAttempts;
+
     @Autowired
     private UserService userService;
 
@@ -87,7 +90,7 @@ public class RecoveryService {
             tokenRepository.delete(recoveryToken);
             return false;
         }
-        if (recoveryToken.attempts() >= 3) {
+        if (recoveryToken.attempts() >= tokenAttempts) {
             tokenRepository.delete(recoveryToken);
             return false;
         }

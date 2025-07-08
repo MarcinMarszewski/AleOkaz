@@ -93,7 +93,7 @@ public class RecoveryServiceTest {
     }
 
     @Test
-    public void shouldVerifyTokenAsCorrecWhenExists() {
+    public void shouldVerifyTokenAsCorrectWhenExists() {
         when(tokenRepository.findByUserId(userId)).thenReturn(recoveryToken);
         boolean isValid = recoveryService.isTokenCorrect("user@mail.com", token);
         assertThat(isValid).isTrue();
