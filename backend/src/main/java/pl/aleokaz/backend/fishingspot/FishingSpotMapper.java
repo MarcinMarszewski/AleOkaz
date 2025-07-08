@@ -2,8 +2,9 @@ package pl.aleokaz.backend.fishingspot;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.aleokaz.backend.post.InteractionMapper;
-import pl.aleokaz.backend.post.PostDto;
+
+import pl.aleokaz.backend.interaction.InteractionMapper;
+import pl.aleokaz.backend.post.PostDTO;
 
 import java.util.ArrayList;
 
@@ -12,10 +13,10 @@ public class FishingSpotMapper {
     @Autowired InteractionMapper interactionMapper;
 
     public FishingSpotDto convertFishingSpotToFishingSpotDto(FishingSpot fishingSpot) {
-        var postDtos = new ArrayList<PostDto>();
+        var postDtos = new ArrayList<PostDTO>();
 
         for (final var post : fishingSpot.posts()) {
-            postDtos.add(interactionMapper.convertPostToPostDto(post, post.author()));
+            postDtos.add(post.asPostDTO());
         }
 
         return FishingSpotDto.builder()

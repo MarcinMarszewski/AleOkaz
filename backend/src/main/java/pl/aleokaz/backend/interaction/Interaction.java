@@ -1,4 +1,4 @@
-package pl.aleokaz.backend.post;
+package pl.aleokaz.backend.interaction;
 
 import pl.aleokaz.backend.comment.Comment;
 import pl.aleokaz.backend.reaction.Reaction;

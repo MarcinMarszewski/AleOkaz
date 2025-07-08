@@ -1,7 +1,10 @@
 package pl.aleokaz.backend.post;
 
 import pl.aleokaz.backend.comment.Comment;
+import pl.aleokaz.backend.comment.CommentDTO;
 import pl.aleokaz.backend.fishingspot.FishingSpot;
+import pl.aleokaz.backend.interaction.Interaction;
+import pl.aleokaz.backend.interaction.InteractionMapper;
 import pl.aleokaz.backend.reaction.Reaction;
 import pl.aleokaz.backend.user.User;
 
@@ -9,14 +12,20 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 public class Post extends Interaction {
+    @Autowired
+    private static InteractionMapper interactionMapper;
+
     @NonNull
     private String imageUrl;
 
@@ -39,5 +48,23 @@ public class Post extends Interaction {
         super(id, content, createdAt, editedAt, author, reactions, comments);
         this.imageUrl = imageUrl;
         this.fishingSpot = fishingSpot;
+    }
+
+    public PostDTO asPostDTO() {
+        final var comments = new HashSet<CommentDTO>();
+        for (final var subcomment : comments()) {
+            comments.add(subcomment.asCommentDto());
+        }
+
+        return PostDTO.builder()
+                .id(id())
+                .content(content())
+                .imageUrl(imageUrl)
+                .createdAt(createdAt())
+                .editedAt(editedAt())
+                .authorId(author().id())
+                .reactions(interactionMapper.convertReactionsToReactionsDto(reactions(), author()))
+                .comments(comments)
+                .build();
     }
 }

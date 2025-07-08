@@ -9,6 +9,8 @@ import lombok.NonNull;
 import pl.aleokaz.backend.fishingspot.FishingSpotRepository;
 import pl.aleokaz.backend.image.ImageSaveException;
 import pl.aleokaz.backend.image.ImageService;
+import pl.aleokaz.backend.interaction.InteractionMapper;
+import pl.aleokaz.backend.post.commands.PostCommand;
 import pl.aleokaz.backend.security.AuthorizationException;
 import pl.aleokaz.backend.user.UserRepository;
 
@@ -36,7 +38,7 @@ public class PostService {
     @Autowired
     private FishingSpotRepository fishingSpotRepository;
 
-    public PostDto createPost(@NonNull UUID userId, PostCommand postCommand, MultipartFile image)
+    public PostDTO createPost(@NonNull UUID userId, PostCommand postCommand, MultipartFile image)
             throws ImageSaveException {
         final var author = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Author not found"));
@@ -61,10 +63,10 @@ public class PostService {
 
         final var savedPost = postRepository.save(post);
 
-        return postMapper.convertPostToPostDto(savedPost, author);
+        return savedPost.asPostDTO();
     }
 
-    public PostDto updatePost(@NonNull UUID userId, UUID postId, PostCommand postCommand)
+    public PostDTO updatePost(@NonNull UUID userId, UUID postId, PostCommand postCommand)
             throws AuthorizationException {
         final var author = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Author not found"));
@@ -80,10 +82,10 @@ public class PostService {
 
         final var savedPost = postRepository.save(post);
 
-        return postMapper.convertPostToPostDto(savedPost, author);
+        return savedPost.asPostDTO();
     }
 
-    public PostDto deletePost(@NonNull UUID userId, UUID postId) throws AuthorizationException {
+    public PostDTO deletePost(@NonNull UUID userId, UUID postId) throws AuthorizationException {
         final var author = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Author not found"));
         final var post = postRepository.findById(postId)
@@ -93,42 +95,30 @@ public class PostService {
             throw new AuthorizationException(userId.toString());
         }
 
-        PostDto responsePost = postMapper.convertPostToPostDto(post, author);
+        PostDTO responsePost = post.asPostDTO();
 
         postRepository.delete(post);
 
         return responsePost;
     }
 
-    public List<PostDto> getAllPosts(UUID userId) {
-        final var user = Optional.ofNullable(userId)
-                .flatMap(userRepository::findById)
-                .orElse(null);
-        final List<Post> posts = postRepository.findAll();
-
-        return posts.stream()
-                .map(post -> postMapper.convertPostToPostDto(post, user))
+    public List<PostDTO> getAllPosts(UUID userId) {
+        return postRepository.findAll()
+                .stream()
+                .map(post -> post.asPostDTO())
                 .collect(Collectors.toList());
     }
 
-    public List<PostDto> getPostsByUserId(UUID userId, UUID authorId) {
-        final var user = Optional.ofNullable(userId)
-                .flatMap(userRepository::findById)
-                .orElse(null);
-        final List<Post> posts = postRepository.findByAuthorId(authorId);
-
-        return posts.stream()
-                .map(post -> postMapper.convertPostToPostDto(post, user))
+    public List<PostDTO> getPostsByUserId(UUID userId, UUID authorId) {
+        return postRepository.findByAuthorId(authorId)
+                .stream()
+                .map(post -> post.asPostDTO())
                 .collect(Collectors.toList());
     }
 
-    public PostDto getPostById(UUID userId, UUID postId) {
-        final var user = Optional.ofNullable(userId)
-                .flatMap(userRepository::findById)
-                .orElse(null);
-        final var post = postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("Post not found"));
-
-        return postMapper.convertPostToPostDto(post, user);
+    public PostDTO getPostById(UUID userId, UUID postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post not found")) //TODO: Introduce custom exception
+                .asPostDTO();
     }
 }

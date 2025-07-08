@@ -1,7 +1,9 @@
 package pl.aleokaz.backend.comment;
 
-import pl.aleokaz.backend.post.InteractionMapper;
-import pl.aleokaz.backend.post.InteractionRepository;
+import pl.aleokaz.backend.comment.commands.CreateCommentCommand;
+import pl.aleokaz.backend.comment.commands.UpdateCommentCommand;
+import pl.aleokaz.backend.comment.exceptions.CommentNotFoundException;
+import pl.aleokaz.backend.interaction.InteractionRepository;
 import pl.aleokaz.backend.security.AuthorizationException;
 import pl.aleokaz.backend.user.UserNotFoundException;
 import pl.aleokaz.backend.user.UserRepository;
@@ -27,14 +29,11 @@ public class CommentService {
     @Autowired
     private InteractionRepository interactionRepository;
 
-    @Autowired
-    private InteractionMapper postMapper;
-
-    public CommentDto createComment(@NonNull UUID userId, @NonNull CreateCommentCommand command) {
+    public CommentDTO createComment(@NonNull UUID userId, @NonNull CreateCommentCommand command) {
         final var author = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("id", userId.toString()));
         final var parent = interactionRepository.findById(command.parentId())
-                .orElseThrow(() -> new RuntimeException("Interaction not found"));
+                .orElseThrow(() -> new CommentNotFoundException("id", command.parentId().toString()));
 
         var comment = Comment.builder()
                 .content(command.content())
@@ -44,14 +43,14 @@ public class CommentService {
                 .build();
         comment = commentRepository.save(comment);
 
-        return postMapper.convertCommentToCommentDto(comment, author);
+        return comment.asCommentDto();
     }
 
-    public CommentDto updateComment(@NonNull UUID userId, @NonNull UpdateCommentCommand command) {
+    public CommentDTO updateComment(@NonNull UUID userId, @NonNull UpdateCommentCommand command) {
         final var author = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("id", userId.toString()));
         var comment = commentRepository.findById(command.commentId())
-                .orElseThrow(() -> new RuntimeException("Comment not found"));
+                .orElseThrow(() -> new CommentNotFoundException("id", command.commentId().toString()));
 
         if (!author.equals(comment.author())) {
             throw new AuthorizationException(userId.toString());
@@ -59,22 +58,22 @@ public class CommentService {
 
         comment.content(command.content());
         comment.editedAt(new Date());
-
         comment = commentRepository.save(comment);
 
-        return postMapper.convertCommentToCommentDto(comment, author);
+        return comment.asCommentDto();
     }
 
     public void deleteComment(@NonNull UUID userId, @NonNull UUID commentId) {
         final var comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new RuntimeException("Comment not found"));
+                .orElseThrow(() -> new CommentNotFoundException("id", commentId.toString()));
 
         if (!userId.equals(comment.author().id())) {
             throw new AuthorizationException(userId.toString());
         }
 
-        // TODO: Nie usuwać podkomentarzy tylko zrobić coś (ale co?).
-        // > wyświetlać komentarz i uzytkownika jako puste?
-        commentRepository.delete(comment);
+        comment.author(null);
+        comment.content("This comment has been deleted.");
+        comment.editedAt(new Date());
+        commentRepository.save(comment);
     }
 }

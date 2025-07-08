@@ -9,12 +9,12 @@ import java.util.Date;
 import java.util.UUID;
 
 @Builder
-public record CommentDto(
+public record CommentDTO(
         @NonNull UUID id,
         @NonNull String content,
         @NonNull Date createdAt,
         Date editedAt,
         @NonNull UUID authorId,
         @NonNull ReactionsDto reactions,
-        @NonNull Set<CommentDto> comments) {
+        @NonNull Set<CommentDTO> comments) {
 }

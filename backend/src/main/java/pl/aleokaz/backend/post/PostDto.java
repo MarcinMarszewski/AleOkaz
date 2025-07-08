@@ -2,9 +2,7 @@ package pl.aleokaz.backend.post;
 
 import lombok.Builder;
 import lombok.NonNull;
-import pl.aleokaz.backend.comment.CommentDto;
-import pl.aleokaz.backend.fishingspot.FishingSpot;
-import pl.aleokaz.backend.fishingspot.FishingSpotDto;
+import pl.aleokaz.backend.comment.CommentDTO;
 import pl.aleokaz.backend.reaction.ReactionsDto;
 
 import java.util.Date;
@@ -12,7 +10,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Builder
-public record PostDto(
+public record PostDTO(
     @NonNull UUID id,
     @NonNull String content,
     @NonNull String imageUrl,
@@ -20,5 +18,5 @@ public record PostDto(
     Date editedAt,
     @NonNull UUID authorId,
     @NonNull ReactionsDto reactions,
-    @NonNull Set<CommentDto> comments) {
+    @NonNull Set<CommentDTO> comments) {
 }

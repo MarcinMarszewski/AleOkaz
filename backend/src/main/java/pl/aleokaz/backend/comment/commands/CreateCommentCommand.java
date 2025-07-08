@@ -1,4 +1,4 @@
-package pl.aleokaz.backend.comment;
+package pl.aleokaz.backend.comment.commands;
 
 import java.util.UUID;
 
@@ -8,8 +8,8 @@ import lombok.NonNull;
 
 @Data
 @AllArgsConstructor
-public class UpdateCommentCommand {
-    private UUID commentId;
+public class CreateCommentCommand {
+    private UUID parentId;
 
     @NonNull
     private String content;

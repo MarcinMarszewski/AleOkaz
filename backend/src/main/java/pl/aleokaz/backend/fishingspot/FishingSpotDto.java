@@ -2,7 +2,7 @@ package pl.aleokaz.backend.fishingspot;
 
 import lombok.Builder;
 import lombok.NonNull;
-import pl.aleokaz.backend.post.PostDto;
+import pl.aleokaz.backend.post.PostDTO;
 
 import java.util.List;
 import java.util.UUID;
@@ -15,5 +15,5 @@ public record FishingSpotDto(
     @NonNull UUID ownerId,
     @NonNull double longitude,
     @NonNull double latitude,
-    @NonNull List<PostDto> posts
+    @NonNull List<PostDTO> posts
 ) {}

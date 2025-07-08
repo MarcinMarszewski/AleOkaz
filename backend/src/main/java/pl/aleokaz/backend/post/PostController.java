@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import pl.aleokaz.backend.image.ImageSaveException;
+import pl.aleokaz.backend.post.commands.PostCommand;
 import pl.aleokaz.backend.reaction.ReactionCommand;
 import pl.aleokaz.backend.reaction.ReactionService;
 import pl.aleokaz.backend.reaction.ReactionType;
@@ -28,7 +29,7 @@ public class PostController {
     private ReactionService reactionService;
 
     @GetMapping
-    public ResponseEntity<List<PostDto>> getAllPosts(
+    public ResponseEntity<List<PostDTO>> getAllPosts(
             Authentication authentication,
             @RequestParam(name = "userId", required = false) UUID authorId) {
         UUID userId = null;
@@ -36,7 +37,7 @@ public class PostController {
             userId = UUID.fromString((String) authentication.getPrincipal());
         }
 
-        List<PostDto> posts;
+        List<PostDTO> posts;
 
         if (authorId != null) {
             posts = postService.getPostsByUserId(userId, authorId);
@@ -48,7 +49,7 @@ public class PostController {
     }
 
     @GetMapping("/{postId}")
-    public ResponseEntity<PostDto> getPost(
+    public ResponseEntity<PostDTO> getPost(
             Authentication authentication,
             @PathVariable UUID postId) {
         UUID userId = null;
@@ -56,12 +57,12 @@ public class PostController {
             userId = UUID.fromString((String) authentication.getPrincipal());
         }
 
-        PostDto post = postService.getPostById(userId, postId);
+        PostDTO post = postService.getPostById(userId, postId);
         return ResponseEntity.ok().body(post);
     }
 
     @PostMapping(consumes = "multipart/form-data")
-    public ResponseEntity<PostDto> createPost(
+    public ResponseEntity<PostDTO> createPost(
             Authentication authentication,
             @RequestPart("post") PostCommand post,
             @RequestParam(value = "image", required = true) MultipartFile image) {
@@ -69,7 +70,7 @@ public class PostController {
         UUID currentUserId = UUID.fromString((String) authentication.getPrincipal());
 
         try {
-            PostDto createdPost = postService.createPost(currentUserId, post, image);
+            PostDTO createdPost = postService.createPost(currentUserId, post, image);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdPost);
         } catch (ImageSaveException pse) {
             return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(null);
@@ -77,7 +78,7 @@ public class PostController {
     }
 
     @PutMapping("/{postId}")
-    public ResponseEntity<PostDto> updatePost(
+    public ResponseEntity<PostDTO> updatePost(
             Authentication authentication,
             @PathVariable UUID postId,
             @RequestPart("post") PostCommand postCommand) {
@@ -85,7 +86,7 @@ public class PostController {
         UUID currentUserId = UUID.fromString((String) authentication.getPrincipal());
 
         try {
-            PostDto post = postService.updatePost(currentUserId, postId, postCommand);
+            PostDTO post = postService.updatePost(currentUserId, postId, postCommand);
             return ResponseEntity.ok().body(post);
         } catch (AuthorizationException ae) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
@@ -93,7 +94,7 @@ public class PostController {
     }
 
     @DeleteMapping("/{postId}")
-    public ResponseEntity<PostDto> deletePost(Authentication authentication, @PathVariable UUID postId) {
+    public ResponseEntity<PostDTO> deletePost(Authentication authentication, @PathVariable UUID postId) {
 
         UUID currentUserId = UUID.fromString((String) authentication.getPrincipal());
 

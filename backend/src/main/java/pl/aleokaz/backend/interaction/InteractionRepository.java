@@ -1,4 +1,4 @@
-package pl.aleokaz.backend.post;
+package pl.aleokaz.backend.interaction;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
