@@ -22,11 +22,17 @@ public class RecoveryService {
     @Value("${recovery.token.expiration.minutes}")
     private int tokenExpirationMinutes;
 
+    @Value("${recovery.token.attempts}")
+    private int tokenAttempts;
+
     @Autowired
     private UserService userService;
 
     @Autowired
     private TokenRepository tokenRepository;
+
+    @Autowired
+    private MailingService mailingService;
 
     public RecoveryService() {
         super();
@@ -35,12 +41,9 @@ public class RecoveryService {
     public void createAndSendRecoveryToken(RecoveryCommand recoveryCommand) {
         RecoveryToken recoveryToken = createRecoveryToken(recoveryCommand);
 
-        MailingService mailingService = MailingService.builder()
-                .email(recoveryCommand.email())
-                .subject("Recovery token")
-                .message("Your recovery token is: " + recoveryToken.token())
-                .build();
-        mailingService.sendEmail();
+        mailingService.sendEmail(recoveryCommand.email(),
+                "Recovery token",
+                "Your recovery token is: " + recoveryToken.token());
     }
 
     public boolean verifyRecoveryToken(CheckTokenCommand checkTokenCommand)
@@ -87,15 +90,15 @@ public class RecoveryService {
             tokenRepository.delete(recoveryToken);
             return false;
         }
+        if (recoveryToken.attempts() >= tokenAttempts) {
+            tokenRepository.delete(recoveryToken);
+            return false;
+        }
         if (recoveryToken.token().equals(token)) {
             return true;
         } else {
             recoveryToken.attempts(recoveryToken.attempts() + 1);
-            if (recoveryToken.attempts() >= 3) {
-                tokenRepository.delete(recoveryToken);
-            } else {
-                tokenRepository.save(recoveryToken);
-            }
+            tokenRepository.save(recoveryToken);
             return false;
         }
     }

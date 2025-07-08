@@ -1,26 +1,12 @@
 package pl.aleokaz.backend.mail;
 
+import org.springframework.stereotype.Service;
+
 import io.micrometer.common.lang.NonNull;
-import lombok.Builder;
 
+@Service
 public class MailingService {
-    @NonNull
-    private String email;
-
-    @NonNull
-    private String subject;
-
-    @NonNull
-    private String message;
-
-    @Builder
-    public MailingService(String email, String subject, String message) {
-        this.email = email;
-        this.subject = subject;
-        this.message = message;
-    }
-
-    public void sendEmail() {
+    public void sendEmail(@NonNull String email, @NonNull String subject, @NonNull String message) {
         System.out.println("Email sent to: " + email + " with subject: " + subject + " and message: " + message);
         // TODO(marcin): implement sending email
     }
