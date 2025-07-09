@@ -1,4 +1,4 @@
-package pl.aleokaz.backend.image;
+package pl.aleokaz.backend.image.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

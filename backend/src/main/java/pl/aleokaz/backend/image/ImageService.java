@@ -4,6 +4,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import pl.aleokaz.backend.image.exceptions.ImageSaveException;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -55,7 +57,7 @@ public class ImageService {
 
         boolean writeSuccess = ImageIO.write(rgbImage, "jpg", filePath.toFile());
         if (!writeSuccess) {
-            throw new IOException("Failed to save image as JPG.");
+            throw new ImageSaveException();
         }
 
         return domainUrl + "/images/" + filename;

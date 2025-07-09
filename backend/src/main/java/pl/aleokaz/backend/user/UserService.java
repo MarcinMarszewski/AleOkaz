@@ -12,8 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.NonNull;
 import org.springframework.web.multipart.MultipartFile;
 
-import pl.aleokaz.backend.image.ImageSaveException;
 import pl.aleokaz.backend.image.ImageService;
+import pl.aleokaz.backend.image.exceptions.ImageSaveException;
 import pl.aleokaz.backend.login.LoginCommand;
 import pl.aleokaz.backend.login.LoginResponse;
 import pl.aleokaz.backend.register.RegisterCommand;

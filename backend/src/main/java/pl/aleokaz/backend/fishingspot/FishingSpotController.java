@@ -32,7 +32,7 @@ public class FishingSpotController {
 
     @GetMapping("/{id}")
     public ResponseEntity<FishingSpotDto> getFishingSpotById(@PathVariable UUID id) {
-        return ResponseEntity.ok(fishingSpotService.getFishingSpotById(id));
+        return ResponseEntity.ok(fishingSpotService.getFishingSpotDtoById(id));
     }
 
     @PostMapping

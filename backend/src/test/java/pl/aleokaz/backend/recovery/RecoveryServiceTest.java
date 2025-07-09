@@ -20,6 +20,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import pl.aleokaz.backend.mail.MailingService;
 import pl.aleokaz.backend.recovery.commands.RecoveryCommand;
@@ -51,6 +52,9 @@ public class RecoveryServiceTest {
 
     @BeforeEach
     public void setup() {
+        ReflectionTestUtils.setField(recoveryService, "tokenAttempts", 5);
+        ReflectionTestUtils.setField(recoveryService, "tokenExpirationMinutes", 60);
+
         token = UUID.randomUUID().toString();
         userId = UUID.randomUUID();
         mockUser = new User(userId, "user@mail.com", "testUser",

@@ -46,11 +46,16 @@ public class FishingSpotService {
         return fishingSpotMapper.convertFishingSpotToFishingSpotDto(savedFishingSpot);
     }
 
-    public FishingSpotDto getFishingSpotById(UUID id) {
+    public FishingSpotDto getFishingSpotDtoById(UUID id) {
         final var fishingSpot = fishingSpotRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Fishing Spot not found"));
 
         return fishingSpotMapper.convertFishingSpotToFishingSpotDto(fishingSpot);
+    }
+
+    public FishingSpot getFishingSpotById(UUID id) {
+        return fishingSpotRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Fishing Spot not found")); //TODO: custom exceptions!!!
     }
 
     public List<FishingSpotDto> getAllFishingSpots() {

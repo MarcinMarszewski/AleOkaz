@@ -19,6 +19,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import pl.aleokaz.backend.post.Post;
+import pl.aleokaz.backend.security.AuthorizationException;
 
 import java.util.HashSet;
 import java.util.List;
@@ -73,5 +74,11 @@ public class User {
         this.password = password;
         this.roles = new HashSet<>(roles);
         this.profilePicture = profilePicture;
+    }
+
+    public void verifyAs(User user) {
+        if (!this.id.equals(user.id)) {
+            throw new AuthorizationException(id().toString());
+        }
     }
 }

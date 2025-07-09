@@ -45,6 +45,7 @@ public class ReactionServiceTest {
                 .email("user@example.com")
                 .password("")
                 .roles(new HashSet<>())
+                .profilePicture("empty")
                 .build();
         final var post = Post.builder()
                 .id(UUID.randomUUID())
@@ -54,6 +55,7 @@ public class ReactionServiceTest {
                 .editedAt(new Date())
                 .author(author)
                 .reactions(new HashSet<>())
+
                 .build();
 
         when(userRepository.findById(author.id()))
