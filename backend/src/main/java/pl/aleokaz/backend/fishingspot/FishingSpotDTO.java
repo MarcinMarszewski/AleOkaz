@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Builder
-public record FishingSpotDto(
+public record FishingSpotDTO(
     @NonNull UUID id,
     @NonNull String name,
     String description,

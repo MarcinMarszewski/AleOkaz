@@ -4,6 +4,7 @@ import org.locationtech.jts.geom.Point;
 import jakarta.persistence.*;
 import lombok.*;
 import pl.aleokaz.backend.post.Post;
+import pl.aleokaz.backend.post.PostDTO;
 import pl.aleokaz.backend.user.User;
 
 import java.util.*;
@@ -50,4 +51,21 @@ public class FishingSpot {
         }
     }
 
+    public FishingSpotDTO asFishingSpotDTO() {
+        List<PostDTO> postDtos = new ArrayList<PostDTO>();
+
+        for (final var post : posts()) {
+            postDtos.add(post.asPostDTO());
+        }
+
+        return FishingSpotDTO.builder()
+            .id(id())
+            .name(name())
+            .description(description())
+            .ownerId(owner().id())
+            .latitude(location().getY())
+            .longitude(location().getX())
+            .posts(postDtos)
+            .build();
+    }
 }

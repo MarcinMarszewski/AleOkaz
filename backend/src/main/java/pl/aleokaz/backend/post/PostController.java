@@ -33,7 +33,7 @@ public class PostController {
     @GetMapping("/{postId}")
     public ResponseEntity<PostDTO> getPost(Authentication authentication, @PathVariable UUID postId) {
         UUID userId = authenticationService.getCurrentUserId(authentication); //THINK: should posts be visible to everyone?
-        Post post = postService.getPostByPostId(postId);
+        Post post = postService.getPostByPostId(postId);                        //necessary for privacy, null as not logged in imo
         return ResponseEntity.ok().body(post.asPostDTO());
     }
 

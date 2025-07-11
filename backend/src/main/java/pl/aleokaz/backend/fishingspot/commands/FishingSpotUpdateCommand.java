@@ -1,4 +1,4 @@
-package pl.aleokaz.backend.fishingspot;
+package pl.aleokaz.backend.fishingspot.commands;
 
 import lombok.Builder;
 import lombok.Data;
