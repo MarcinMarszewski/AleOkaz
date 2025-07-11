@@ -7,20 +7,17 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import pl.aleokaz.backend.interaction.InteractionMapper;
-import pl.aleokaz.backend.interaction.InteractionRepository;
-import pl.aleokaz.backend.reaction.ReactionCommand;
+import pl.aleokaz.backend.interaction.InteractionService;
 import pl.aleokaz.backend.reaction.ReactionService;
 import pl.aleokaz.backend.reaction.ReactionType;
+import pl.aleokaz.backend.reaction.commands.ReactionCommand;
 import pl.aleokaz.backend.user.User;
-import pl.aleokaz.backend.user.UserRepository;
+import pl.aleokaz.backend.user.UserService;
 
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.UUID;
 
 @ExtendWith(MockitoExtension.class)
@@ -28,14 +25,11 @@ public class ReactionServiceTest {
     @InjectMocks
     private ReactionService reactionService;
 
-    @Spy
-    private InteractionMapper postMapper;
+    @Mock
+    private InteractionService interactionService;
 
     @Mock
-    private InteractionRepository interactionRepository;
-
-    @Mock
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Test
     public void shouldSetPostReaction() throws Exception {
@@ -58,14 +52,13 @@ public class ReactionServiceTest {
 
                 .build();
 
-        when(userRepository.findById(author.id()))
-                .thenReturn(Optional.of(author));
-        when(interactionRepository.findById(post.id()))
-                .thenReturn(Optional.of(post));
+        when(userService.getUserById(author.id()))
+                .thenReturn(author);
+        when(interactionService.getInteractionById(post.id()))
+                .thenReturn(post);
+        reactionService.setReaction(author.id(), post.id(), new ReactionCommand(null, ReactionType.LIKE));
 
-        reactionService.setReaction(author.id(), new ReactionCommand(post.id(), ReactionType.LIKE));
-
-        verify(interactionRepository).save(
+        verify(interactionService).saveInteraction(
                 argThat(savedPost -> savedPost.reactions().stream()
                         .anyMatch(reaction -> reaction.type().equals(ReactionType.LIKE) &&
                                 reaction.author().equals(author) &&

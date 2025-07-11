@@ -1,16 +1,14 @@
-package pl.aleokaz.backend.reaction;
+package pl.aleokaz.backend.reaction.commands;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NonNull;
-
-import java.util.UUID;
+import pl.aleokaz.backend.reaction.ReactionType;
 
 @Data
 @AllArgsConstructor
 public class ReactionCommand {
-    @NonNull
-    private UUID interactionId;
+    private Void _empty;
 
     @NonNull
     private ReactionType reactionType;

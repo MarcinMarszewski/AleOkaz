@@ -2,9 +2,6 @@ package pl.aleokaz.backend.comment;
 
 import pl.aleokaz.backend.comment.commands.CreateCommentCommand;
 import pl.aleokaz.backend.comment.commands.UpdateCommentCommand;
-import pl.aleokaz.backend.reaction.ReactionCommand;
-import pl.aleokaz.backend.reaction.ReactionService;
-import pl.aleokaz.backend.reaction.ReactionType;
 import pl.aleokaz.backend.security.AuthenticationService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +21,6 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
 
-    @Autowired
-    private ReactionService reactionService;
-
     @PostMapping
     public ResponseEntity<CommentDTO> createComment(Authentication authentication, @RequestBody CreateCommentCommand command) {
         final var currentUserId = authenticationService.getCurrentUserId(authentication);
@@ -43,30 +37,6 @@ public class CommentController {
     public ResponseEntity<Void> deleteComment(Authentication authentication, @PathVariable UUID commentId) {
         final var currentUserId = authenticationService.getCurrentUserId(authentication);
         commentService.deleteComment(currentUserId, commentId);
-        return ResponseEntity.noContent().build();
-    }
-    
-    //TODO: Move to reactions
-    @PutMapping("/{commentId}/reactions")
-    public ResponseEntity<Void> setPostReaction(
-            Authentication authentication,
-            @PathVariable UUID commentId) {
-        final UUID userId = UUID.fromString((String) authentication.getPrincipal());
-
-        // TODO: Wczytanie typu reakcji z @RequestBody.
-        reactionService.setReaction(userId, new ReactionCommand(commentId, ReactionType.LIKE));
-
-        return ResponseEntity.noContent().build();
-    }
-
-    @DeleteMapping("/{commentId}/reactions")
-    public ResponseEntity<Void> deletePostReaction(
-            Authentication authentication,
-            @PathVariable UUID commentId) {
-        final UUID userId = UUID.fromString((String) authentication.getPrincipal());
-
-        reactionService.deleteReaction(userId, commentId);
-
         return ResponseEntity.noContent().build();
     }
 }

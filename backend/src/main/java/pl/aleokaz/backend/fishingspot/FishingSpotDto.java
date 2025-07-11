@@ -13,7 +13,7 @@ public record FishingSpotDto(
     @NonNull String name,
     String description,
     @NonNull UUID ownerId,
-    @NonNull double longitude,
-    @NonNull double latitude,
+    double longitude,
+    double latitude,
     @NonNull List<PostDTO> posts
 ) {}

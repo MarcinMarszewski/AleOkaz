@@ -8,9 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import pl.aleokaz.backend.post.commands.PostCommand;
-import pl.aleokaz.backend.reaction.ReactionCommand;
-import pl.aleokaz.backend.reaction.ReactionService;
-import pl.aleokaz.backend.reaction.ReactionType;
 import pl.aleokaz.backend.security.AuthenticationService;
 
 import java.util.List;
@@ -25,9 +22,6 @@ public class PostController {
 
     @Autowired
     private PostService postService;
-
-    @Autowired
-    private ReactionService reactionService;
 
     @GetMapping
     public ResponseEntity<List<PostDTO>> getAllPosts(Authentication authentication, @RequestParam(name = "userId", required = false) UUID authorId) {
@@ -61,27 +55,6 @@ public class PostController {
     public ResponseEntity<PostDTO> deletePost(Authentication authentication, @PathVariable UUID postId) {
         UUID currentUserId = authenticationService.getCurrentUserId(authentication);
         postService.deletePost(currentUserId, postId);
-        return ResponseEntity.noContent().build();
-    }
-
-
-    //TODO: move to ReactionController
-    @PutMapping("/{postId}/reactions")
-    public ResponseEntity<Void> setPostReaction(Authentication authentication, @PathVariable UUID postId) {
-        final UUID userId = UUID.fromString((String) authentication.getPrincipal());
-
-        // TODO: Wczytanie typu reakcji z @RequestBody.
-        reactionService.setReaction(userId, new ReactionCommand(postId, ReactionType.LIKE));
-
-        return ResponseEntity.noContent().build();
-    }
-
-    @DeleteMapping("/{postId}/reactions")
-    public ResponseEntity<Void> deletePostReaction(Authentication authentication, @PathVariable UUID postId) {
-        final UUID userId = UUID.fromString((String) authentication.getPrincipal());
-
-        reactionService.deleteReaction(userId, postId);
-
         return ResponseEntity.noContent().build();
     }
 }

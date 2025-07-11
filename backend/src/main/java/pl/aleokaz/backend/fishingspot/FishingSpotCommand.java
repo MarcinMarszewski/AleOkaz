@@ -12,6 +12,6 @@ public class FishingSpotCommand {
 
     private String description;
 
-    @NonNull private double latitude;
-    @NonNull private double longitude;
+    private double latitude;
+    private double longitude;
 }

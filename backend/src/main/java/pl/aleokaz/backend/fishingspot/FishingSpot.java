@@ -20,7 +20,8 @@ public class FishingSpot {
     @NonNull
     private String name;
 
-    private String description="";
+    @Builder.Default
+    private String description = "";
 
     @OneToOne
     @JoinColumn(name = "owner_id", nullable = false)

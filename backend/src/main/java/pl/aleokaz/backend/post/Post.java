@@ -4,8 +4,8 @@ import pl.aleokaz.backend.comment.Comment;
 import pl.aleokaz.backend.comment.CommentDTO;
 import pl.aleokaz.backend.fishingspot.FishingSpot;
 import pl.aleokaz.backend.interaction.Interaction;
-import pl.aleokaz.backend.interaction.InteractionMapper;
 import pl.aleokaz.backend.reaction.Reaction;
+import pl.aleokaz.backend.reaction.ReactionService;
 import pl.aleokaz.backend.user.User;
 
 import jakarta.persistence.*;
@@ -24,7 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @NoArgsConstructor
 public class Post extends Interaction {
     @Autowired
-    private static InteractionMapper interactionMapper;
+    private ReactionService reactionService;
 
     @NonNull
     private String imageUrl;
@@ -63,7 +63,7 @@ public class Post extends Interaction {
                 .createdAt(createdAt())
                 .editedAt(editedAt())
                 .authorId(author().id())
-                .reactions(interactionMapper.convertReactionsToReactionsDto(reactions(), author()))
+                .reactions(reactionService.reactionsAsReactionsDto(reactions(), author()))
                 .comments(comments)
                 .build();
     }

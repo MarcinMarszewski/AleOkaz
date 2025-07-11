@@ -1,5 +1,9 @@
 package pl.aleokaz.backend.reaction;
 
 public enum ReactionType {
-    LIKE
+    LIKE,
+    HEART,
+    LAUGH,
+    WOW,
+    FISH
 }

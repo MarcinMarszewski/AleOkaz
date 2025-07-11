@@ -2,7 +2,7 @@ package pl.aleokaz.backend.comment;
 
 import lombok.Builder;
 import lombok.NonNull;
-import pl.aleokaz.backend.reaction.ReactionsDto;
+import pl.aleokaz.backend.reaction.ReactionsDTO;
 
 import java.util.Set;
 import java.util.Date;
@@ -15,6 +15,6 @@ public record CommentDTO(
         @NonNull Date createdAt,
         Date editedAt,
         @NonNull UUID authorId,
-        @NonNull ReactionsDto reactions,
+        @NonNull ReactionsDTO reactions,
         @NonNull Set<CommentDTO> comments) {
 }

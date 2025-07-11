@@ -11,10 +11,22 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReactionsDto {
+public class ReactionsDTO {
     @JsonProperty
     private ReactionType userReaction;
 
     @JsonProperty
     private long likes;
+
+    @JsonProperty
+    private long hearts;
+
+    @JsonProperty
+    private long laughs;
+
+    @JsonProperty
+    private long wows;
+
+    @JsonProperty
+    private long fish;
 }

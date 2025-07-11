@@ -20,7 +20,6 @@ import pl.aleokaz.backend.comment.Comment;
 import pl.aleokaz.backend.comment.CommentRepository;
 import pl.aleokaz.backend.comment.CommentService;
 import pl.aleokaz.backend.comment.commands.CreateCommentCommand;
-import pl.aleokaz.backend.interaction.InteractionMapper;
 import pl.aleokaz.backend.interaction.InteractionRepository;
 import pl.aleokaz.backend.user.User;
 import pl.aleokaz.backend.user.UserRepository;
@@ -29,9 +28,6 @@ import pl.aleokaz.backend.user.UserRepository;
 public class CommentServiceTest {
     @InjectMocks
     private CommentService commentService;
-
-    @Mock
-    private InteractionMapper interactionMapper;
 
     @Mock
     private InteractionRepository interactionRepository;

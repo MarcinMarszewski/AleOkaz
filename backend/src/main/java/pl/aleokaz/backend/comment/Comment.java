@@ -2,7 +2,7 @@ package pl.aleokaz.backend.comment;
 
 import pl.aleokaz.backend.interaction.Interaction;
 import pl.aleokaz.backend.reaction.Reaction;
-import pl.aleokaz.backend.reaction.ReactionsDto;
+import pl.aleokaz.backend.reaction.ReactionsDTO;
 import pl.aleokaz.backend.user.User;
 
 import jakarta.persistence.*;
@@ -44,7 +44,7 @@ public class Comment extends Interaction {
             comments.add(subcomment.asCommentDto());
         }
 
-        final var reactionsDto = new ReactionsDto();
+        final var reactionsDto = new ReactionsDTO();
 
         for (final var reaction : reactions()) {
             if (reaction.author().equals(author())) {
@@ -53,6 +53,10 @@ public class Comment extends Interaction {
 
             switch (reaction.type()) {
                 case LIKE -> reactionsDto.likes(reactionsDto.likes() + 1);
+                case HEART -> reactionsDto.hearts(reactionsDto.hearts() + 1);
+                case LAUGH -> reactionsDto.laughs(reactionsDto.laughs() + 1);
+                case WOW -> reactionsDto.wows(reactionsDto.wows() + 1);
+                case FISH -> reactionsDto.fish(reactionsDto.fish() + 1);
             }
         }
 

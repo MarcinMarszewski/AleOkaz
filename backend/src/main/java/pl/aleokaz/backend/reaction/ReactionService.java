@@ -1,7 +1,10 @@
 package pl.aleokaz.backend.reaction;
 
-import pl.aleokaz.backend.interaction.InteractionRepository;
-import pl.aleokaz.backend.user.UserRepository;
+import pl.aleokaz.backend.interaction.Interaction;
+import pl.aleokaz.backend.interaction.InteractionService;
+import pl.aleokaz.backend.reaction.commands.ReactionCommand;
+import pl.aleokaz.backend.user.User;
+import pl.aleokaz.backend.user.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,41 +20,50 @@ import java.util.UUID;
 @Transactional
 public class ReactionService {
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
-    private InteractionRepository interactionRepository;
+    private InteractionService interactionService;
 
-    public void setReaction(
-            @NonNull UUID userId,
-            @NonNull ReactionCommand command) {
-        final var author = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        final var interaction = interactionRepository.findById(command.interactionId())
-                .orElseThrow(() -> new RuntimeException("Interaction not found"));
+    public void setReaction(@NonNull UUID userId, @NonNull UUID interactionId, @NonNull ReactionCommand reactionCommand) {
+        User author = userService.getUserById(userId);
+        Interaction interaction = interactionService.getInteractionById(interactionId);
 
-        final Set<Reaction> reactions = interaction.reactions();
+        Set<Reaction> reactions = interaction.reactions();
         reactions.removeIf(reaction -> reaction.author().id().equals(userId));
         reactions.add(Reaction.builder()
-                .type(command.reactionType())
+                .type(reactionCommand.reactionType())
                 .author(author)
                 .interaction(interaction)
                 .build());
 
-        interactionRepository.save(interaction);
+        interactionService.saveInteraction(interaction);
     }
 
     public void deleteReaction(@NonNull UUID userId, @NonNull UUID interactionId) {
-        if (!userRepository.existsById(userId)) {
-            throw new RuntimeException("User not found");
-        }
-
-        final var interaction = interactionRepository.findById(interactionId)
-                .orElseThrow(() -> new RuntimeException("Interaction not found"));
-
-        final Set<Reaction> reactions = interaction.reactions();
+        userService.getUserById(userId);
+        Interaction interaction = interactionService.getInteractionById(interactionId);
+        Set<Reaction> reactions = interaction.reactions();
         reactions.removeIf(reaction -> reaction.author().id().equals(userId));
+        interactionService.saveInteraction(interaction);
+    }
 
-        interactionRepository.save(interaction);
+    public ReactionsDTO reactionsAsReactionsDto(Set<Reaction> reactions, User user) {
+        final var result = new ReactionsDTO();
+
+        for (final var reaction : reactions) {
+            if (reaction.author().equals(user)) {
+                result.userReaction(reaction.type());
+            }
+
+            switch (reaction.type()) {
+                case LIKE -> result.likes(result.likes() + 1);
+                case HEART -> result.hearts(result.hearts() + 1);
+                case LAUGH -> result.laughs(result.laughs() + 1);
+                case WOW -> result.wows(result.wows() + 1);
+                case FISH -> result.fish(result.fish() + 1);
+            }
+        }
+        return result;
     }
 }
