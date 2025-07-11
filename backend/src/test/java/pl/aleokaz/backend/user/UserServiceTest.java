@@ -4,14 +4,16 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.test.util.ReflectionTestUtils;
 
+import pl.aleokaz.backend.image.ImageService;
 import pl.aleokaz.backend.register.RegisterCommand;
 import pl.aleokaz.backend.security.JwtTokenProvider;
 import pl.aleokaz.backend.security.VerificationRepository;
@@ -37,15 +39,22 @@ public class UserServiceTest {
     @Spy
     private JwtTokenProvider jwtTokenProvider;
 
-    @Value("${aleokaz.profile.picture.default}")
-    private String defaultProfilePicture;
+    @Mock
+    private ImageService imageService;
+
+    private String defaultProfilePicture = "defaultProfilePicture.png";
+
+    @BeforeEach
+    public void setUp() {
+        ReflectionTestUtils.setField(userService, "defaultProfilePicture", defaultProfilePicture);
+    }
 
     @Test
     public void shouldRegisterUser() throws Exception {
         final Set<UserRole> roles = new HashSet<>();
         roles.add(UserRole.UNVERIFIED_USER);
 
-        final var saved = new User(UUID.randomUUID(), "user@example.com", "user", "", roles, defaultProfilePicture);
+        final var saved = new User(UUID.randomUUID(), "user@example.com", "user", "", roles, "defaultProfilePicture");
         when(userRepository.save(
                 argThat(user -> user.username().equals("user") &&
                         user.email().equals("user@example.com"))))
