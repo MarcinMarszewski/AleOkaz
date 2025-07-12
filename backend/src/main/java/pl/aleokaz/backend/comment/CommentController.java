@@ -10,6 +10,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
+// TODO: Controller rework
+// /api/comments/{id} dla wszystkich operacji
+// usunięcie id z komend
 
 //TODO: Add error handling with @ControllerAdvice
 @RestController
@@ -22,21 +25,23 @@ public class CommentController {
     private CommentService commentService;
 
     @PostMapping
-    public ResponseEntity<CommentDTO> createComment(Authentication authentication, @RequestBody CreateCommentCommand command) {
-        final var currentUserId = authenticationService.getCurrentUserId(authentication);
-        return ResponseEntity.ok().body(commentService.createComment(currentUserId, command));
+    public ResponseEntity<CommentDTO> createComment(Authentication authentication, @RequestBody CreateCommentCommand createCommentCommand) {
+        UUID currentUserId = authenticationService.getCurrentUserId(authentication);
+        Comment comment = commentService.createComment(currentUserId, createCommentCommand.parentId(), createCommentCommand.content());
+        return ResponseEntity.ok().body(comment.asCommentDto());
     }
 
     @PutMapping("/{commentId}")
     public ResponseEntity<CommentDTO> updateComment(Authentication authentication, @PathVariable UUID commentId, @RequestBody UpdateCommentCommand command) {
-        final var currentUserId = authenticationService.getCurrentUserId(authentication);
-        return ResponseEntity.ok().body(commentService.updateComment(currentUserId, command));
+        UUID currentUserId = authenticationService.getCurrentUserId(authentication);
+        Comment comment = commentService.updateComment(currentUserId, commentId, command.content());
+        return ResponseEntity.ok().body(comment.asCommentDto());
     }
 
     @DeleteMapping("/{commentId}")
     public ResponseEntity<Void> deleteComment(Authentication authentication, @PathVariable UUID commentId) {
-        final var currentUserId = authenticationService.getCurrentUserId(authentication);
-        commentService.deleteComment(currentUserId, commentId);
+        UUID currentUserId = authenticationService.getCurrentUserId(authentication);
+        commentService.deleteCommentAsUser(currentUserId, commentId);
         return ResponseEntity.noContent().build();
     }
 }

@@ -19,7 +19,6 @@ import pl.aleokaz.backend.security.JwtTokenProvider;
 import pl.aleokaz.backend.security.VerificationRepository;
 import pl.aleokaz.backend.user.exceptions.UserExistsException;
 
-import java.sql.Ref;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;

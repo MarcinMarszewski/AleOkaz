@@ -1,12 +1,10 @@
 package pl.aleokaz.backend.comment;
 
-import pl.aleokaz.backend.comment.commands.CreateCommentCommand;
-import pl.aleokaz.backend.comment.commands.UpdateCommentCommand;
 import pl.aleokaz.backend.comment.exceptions.CommentNotFoundException;
-import pl.aleokaz.backend.interaction.InteractionRepository;
-import pl.aleokaz.backend.security.AuthorizationException;
-import pl.aleokaz.backend.user.UserRepository;
-import pl.aleokaz.backend.user.exceptions.UserNotFoundException;
+import pl.aleokaz.backend.interaction.Interaction;
+import pl.aleokaz.backend.interaction.InteractionService;
+import pl.aleokaz.backend.user.User;
+import pl.aleokaz.backend.user.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,59 +19,51 @@ import java.util.UUID;
 @Transactional
 public class CommentService {
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
     private CommentRepository commentRepository;
 
     @Autowired
-    private InteractionRepository interactionRepository;
+    private InteractionService interactionService;
 
-    public CommentDTO createComment(@NonNull UUID userId, @NonNull CreateCommentCommand command) {
-        final var author = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("id", userId.toString()));
-        final var parent = interactionRepository.findById(command.parentId())
-                .orElseThrow(() -> new CommentNotFoundException("id", command.parentId().toString()));
+    public Comment createComment(@NonNull UUID userId, @NonNull UUID parentInteractionId, @NonNull String content) {
+        User user = userService.getUserById(userId);
+        Interaction parentInteraction = interactionService.getInteractionById(parentInteractionId);
 
         var comment = Comment.builder()
-                .content(command.content())
+                .content(content)
                 .createdAt(new Date())
-                .author(author)
-                .parent(parent)
+                .author(user)
+                .parent(parentInteraction)
                 .build();
-        comment = commentRepository.save(comment);
-
-        return comment.asCommentDto();
+        return commentRepository.save(comment);
     }
 
-    public CommentDTO updateComment(@NonNull UUID userId, @NonNull UpdateCommentCommand command) {
-        final var author = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("id", userId.toString()));
-        var comment = commentRepository.findById(command.commentId())
-                .orElseThrow(() -> new CommentNotFoundException("id", command.commentId().toString()));
+    public Comment updateComment(@NonNull UUID userId, @NonNull UUID commentId, @NonNull String newContent) {
+        User user = userService.getUserById(userId);
+        Comment comment = getCommentById(commentId);
 
-        if (!author.equals(comment.author())) {
-            throw new AuthorizationException(userId.toString());
-        }
-
-        comment.content(command.content());
+        user.verifyAs(comment.author());
+        
+        comment.content(newContent);
         comment.editedAt(new Date());
-        comment = commentRepository.save(comment);
-
-        return comment.asCommentDto();
+        return commentRepository.save(comment);
     }
 
-    public void deleteComment(@NonNull UUID userId, @NonNull UUID commentId) {
-        final var comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new CommentNotFoundException("id", commentId.toString()));
+    public Comment deleteCommentAsUser(@NonNull UUID userId, @NonNull UUID commentId) {
+        User user = userService.getUserById(userId);
+        Comment comment = getCommentById(commentId);
 
-        if (!userId.equals(comment.author().id())) {
-            throw new AuthorizationException(userId.toString());
-        }
-
+        user.verifyAs(comment.author());
         comment.author(null);
         comment.content("This comment has been deleted.");
         comment.editedAt(new Date());
-        commentRepository.save(comment);
+        return commentRepository.save(comment);
+    }
+
+    public Comment getCommentById(@NonNull UUID commentId) {
+        return commentRepository.findById(commentId)
+                .orElseThrow(() -> new CommentNotFoundException("id", commentId.toString()));
     }
 }

@@ -6,7 +6,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
@@ -19,10 +18,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import pl.aleokaz.backend.comment.Comment;
 import pl.aleokaz.backend.comment.CommentRepository;
 import pl.aleokaz.backend.comment.CommentService;
-import pl.aleokaz.backend.comment.commands.CreateCommentCommand;
-import pl.aleokaz.backend.interaction.InteractionRepository;
+import pl.aleokaz.backend.interaction.InteractionService;
 import pl.aleokaz.backend.user.User;
-import pl.aleokaz.backend.user.UserRepository;
+import pl.aleokaz.backend.user.UserService;
 
 @ExtendWith(MockitoExtension.class)
 public class CommentServiceTest {
@@ -30,13 +28,13 @@ public class CommentServiceTest {
     private CommentService commentService;
 
     @Mock
-    private InteractionRepository interactionRepository;
+    private InteractionService interactionService;
 
     @Spy
     private CommentRepository commentRepository;
 
     @Mock
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Test
     public void shouldCreateComment() throws Exception {
@@ -58,20 +56,17 @@ public class CommentServiceTest {
                 .reactions(new HashSet<>())
                 .build();
 
-        when(userRepository.findById(author.id()))
-                .thenReturn(Optional.of(author));
-        when(interactionRepository.findById(post.id()))
-                .thenReturn(Optional.of(post));
+        when(userService.getUserById(author.id()))
+                .thenReturn(author);
+        when(interactionService.getInteractionById(post.id()))
+                .thenReturn(post);
         when(commentRepository.save(any(Comment.class)))
                 .thenAnswer(invocation -> {
                     final Comment comment = invocation.getArgument(0);
                     comment.id(UUID.randomUUID());
                     return comment;
                 });
-
-        final var command = new CreateCommentCommand(post.id(), "More dolor sit amet");
-
-        final var result = commentService.createComment(author.id(), command);
+        final var result = commentService.createComment(author.id(), post.id(), "More dolor sit amet");
 
         assertEquals("More dolor sit amet", result.content());
     }
