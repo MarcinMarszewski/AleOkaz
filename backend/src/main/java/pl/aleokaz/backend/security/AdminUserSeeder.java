@@ -1,4 +1,4 @@
-package pl.aleokaz.backend.user;
+package pl.aleokaz.backend.security;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +9,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
-import pl.aleokaz.backend.register.RegisterCommand;
+import pl.aleokaz.backend.user.UserService;
+import pl.aleokaz.backend.user.exceptions.UserExistsException;
 
 @Component
 public class AdminUserSeeder implements ApplicationListener<ContextRefreshedEvent> {
@@ -33,14 +34,8 @@ public class AdminUserSeeder implements ApplicationListener<ContextRefreshedEven
             return;
         }
 
-        final var admin = RegisterCommand.builder()
-                .username("admin")
-                .email(email)
-                .password(password.toCharArray())
-                .build();
-
         try {
-            userService.registerUser(admin);
+            userService.registerUser("admin", email, password.toCharArray());
         } catch (UserExistsException e) {
         }
 

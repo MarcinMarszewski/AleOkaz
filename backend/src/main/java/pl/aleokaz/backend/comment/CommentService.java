@@ -5,8 +5,8 @@ import pl.aleokaz.backend.comment.commands.UpdateCommentCommand;
 import pl.aleokaz.backend.comment.exceptions.CommentNotFoundException;
 import pl.aleokaz.backend.interaction.InteractionRepository;
 import pl.aleokaz.backend.security.AuthorizationException;
-import pl.aleokaz.backend.user.UserNotFoundException;
 import pl.aleokaz.backend.user.UserRepository;
+import pl.aleokaz.backend.user.exceptions.UserNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

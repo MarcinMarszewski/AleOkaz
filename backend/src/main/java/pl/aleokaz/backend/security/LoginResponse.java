@@ -1,4 +1,4 @@
-package pl.aleokaz.backend.login;
+package pl.aleokaz.backend.security;
 
 import lombok.*;
 

@@ -1,4 +1,4 @@
-package pl.aleokaz.backend.register;
+package pl.aleokaz.backend.user.commands;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
@@ -7,15 +7,10 @@ import lombok.NonNull;
 
 @Data
 @Builder
-public
-class RegisterCommand {
+public class LoginCommand {
         @NonNull
         @NotBlank
         private String username;
-
-        @NonNull
-        @NotBlank
-        private String email;
 
         @NonNull
         @NotBlank

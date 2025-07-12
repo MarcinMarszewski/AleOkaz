@@ -25,9 +25,9 @@ import org.springframework.kafka.core.KafkaTemplate;
 
 import pl.aleokaz.backend.friends.commands.FriendCommand;
 import pl.aleokaz.backend.user.User;
-import pl.aleokaz.backend.user.UserNotFoundException;
 import pl.aleokaz.backend.user.UserRole;
 import pl.aleokaz.backend.user.UserService;
+import pl.aleokaz.backend.user.exceptions.UserNotFoundException;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)

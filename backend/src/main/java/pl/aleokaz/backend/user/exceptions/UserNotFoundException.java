@@ -1,4 +1,4 @@
-package pl.aleokaz.backend.user;
+package pl.aleokaz.backend.user.exceptions;
 
 import java.util.UUID;
 

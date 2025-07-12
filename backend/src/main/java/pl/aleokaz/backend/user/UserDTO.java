@@ -6,7 +6,7 @@ import lombok.NonNull;
 import java.util.UUID;
 
 @Builder
-record UserDto(
+record UserDTO(
         @NonNull UUID id,
         @NonNull String username,
         @NonNull String email,

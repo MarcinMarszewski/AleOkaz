@@ -81,4 +81,13 @@ public class User {
             throw new AuthorizationException(id().toString());
         }
     }
+
+    public UserDTO asUserDTO() {
+        return UserDTO.builder()
+                .id(id)
+                .username(username)
+                .email(email)
+                .profilePicture(profilePicture)
+                .build();
+    }
 }

@@ -11,70 +11,74 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import pl.aleokaz.backend.register.RegisterCommand;
-import pl.aleokaz.backend.image.exceptions.ImageSaveException;
-import pl.aleokaz.backend.login.LoginCommand;
-import pl.aleokaz.backend.login.LoginResponse;
+
+import pl.aleokaz.backend.security.AuthenticationService;
+import pl.aleokaz.backend.security.LoginResponse;
+import pl.aleokaz.backend.security.RefreshResponse;
+import pl.aleokaz.backend.user.commands.LoginCommand;
+import pl.aleokaz.backend.user.commands.RefreshCommand;
+import pl.aleokaz.backend.user.commands.RegisterCommand;
+import pl.aleokaz.backend.user.commands.UpdateInfoCommand;
 
 // TODO(michalciechan): Obsługa wyjątków.
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
     @Autowired
+    private AuthenticationService authenticationService;
+
+    @Autowired
     private UserService userService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> findUserById(@PathVariable UUID id) {
-        return ResponseEntity.ok(userService.findUserById(id));
+    public ResponseEntity<UserDTO> findUserById(@PathVariable UUID id) {
+        return ResponseEntity.ok(userService.getUserById(id).asUserDTO());
     }
 
     @PostMapping
-    public ResponseEntity<UserDto> registerUser(@RequestBody RegisterCommand registerCommand)
+    public ResponseEntity<UserDTO> registerUser(@RequestBody RegisterCommand registerCommand)
             throws URISyntaxException {
-        final var user = userService.registerUser(registerCommand);
+        User user = userService.registerUser(registerCommand.username(),
+                registerCommand.email(),
+                registerCommand.password());
         final var uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(user.id())
                 .toUri();
-        return ResponseEntity.created(uri).body(user);
+        return ResponseEntity.created(uri).body(user.asUserDTO());
     }
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> loginUser(@RequestBody LoginCommand loginCommand) {
-        return ResponseEntity.ok(userService.loginUser(loginCommand));
+        LoginResponse loginResponse = userService.loginUser(loginCommand.username(), loginCommand.password());
+        return ResponseEntity.ok(loginResponse);
     }
 
     @PostMapping("/refresh")
     public ResponseEntity<RefreshResponse> refreshUserToken(@RequestBody RefreshCommand refreshCommand) {
-        return ResponseEntity.ok(userService.refreshUserToken(refreshCommand));
+        RefreshResponse refreshResponse = userService.refreshUserToken(refreshCommand.refreshToken());
+        return ResponseEntity.ok(refreshResponse);
     }
 
     @GetMapping("/info/{id}")
-    public ResponseEntity<UserDto> getUserInfo(@PathVariable UUID id) {
-        return ResponseEntity.ok(userService.getUserInfo(id));
+    public ResponseEntity<UserDTO> getUserInfo(@PathVariable UUID id) {
+        User user = userService.getUserById(id);
+        return ResponseEntity.ok(user.asUserDTO());
     }
 
     @GetMapping("/info")
-    public ResponseEntity<UserDto> getUserInfo(Authentication authentication) {
-        UUID currentUserId = UUID.fromString((String) authentication.getPrincipal());
-
-        return ResponseEntity.ok(userService.getUserInfo(currentUserId));
+    public ResponseEntity<UserDTO> getUserInfo(Authentication authentication) {
+        UUID currentUserId = authenticationService.getCurrentUserId(authentication);
+        return ResponseEntity.ok(userService.getUserById(currentUserId).asUserDTO());
     }
 
     @PutMapping(path="/info", consumes = "multipart/form-data")
-    public ResponseEntity<UserDto> updateUserInfo(
-        Authentication authentication,
-        @RequestPart(value = "userInfo", required = false) UpdateInfoCommand updateInfoCommand,
-        @RequestParam(value = "image", required = false) MultipartFile image) {
-
-        UUID currentUserId = UUID.fromString((String) authentication.getPrincipal());
-
-        try {
-            UserDto userInfo = userService.updateUserInfo(currentUserId, updateInfoCommand, image);
-            return ResponseEntity.status(HttpStatus.CREATED).body(userInfo);
-        } catch (ImageSaveException pse) {
-            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(null);
-        }
+    public ResponseEntity<UserDTO> updateUserInfo(
+                Authentication authentication,
+                @RequestPart(value = "userInfo", required = false) UpdateInfoCommand updateInfoCommand,
+                @RequestParam(value = "image", required = false) MultipartFile image) {
+        UUID currentUserId = authenticationService.getCurrentUserId(authentication);
+        User user = userService.updateUserInfo(currentUserId, updateInfoCommand, image);
+        return ResponseEntity.status(HttpStatus.CREATED).body(user.asUserDTO());
     }
-
 }
