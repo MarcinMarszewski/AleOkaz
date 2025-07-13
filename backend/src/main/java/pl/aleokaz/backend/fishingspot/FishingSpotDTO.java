@@ -9,11 +9,11 @@ import java.util.UUID;
 
 @Builder
 public record FishingSpotDTO(
-    @NonNull UUID id,
-    @NonNull String name,
-    String description,
-    @NonNull UUID ownerId,
-    double longitude,
-    double latitude,
-    @NonNull List<PostDTO> posts
-) {}
+        @NonNull UUID id,
+        @NonNull String name,
+        String description,
+        @NonNull UUID ownerId,
+        double longitude,
+        double latitude,
+        @NonNull List<PostDTO> posts) {
+}

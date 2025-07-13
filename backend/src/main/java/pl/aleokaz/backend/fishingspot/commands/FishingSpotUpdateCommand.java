@@ -11,5 +11,6 @@ public class FishingSpotUpdateCommand {
     private String description;
 
     private double latitude;
+    
     private double longitude;
 }

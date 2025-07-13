@@ -1,5 +1,6 @@
 package pl.aleokaz.backend.user;
 
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.UUID;
 
@@ -32,7 +33,10 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> findUserById(@PathVariable UUID id) {
-        return ResponseEntity.ok(userService.getUserById(id).asUserDTO());
+        User user = userService.getUserById(id);
+        if (user == null)
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(user.asUserDTO(), HttpStatus.OK);
     }
 
     @PostMapping
@@ -41,7 +45,9 @@ public class UserController {
         User user = userService.registerUser(registerCommand.username(),
                 registerCommand.email(),
                 registerCommand.password());
-        final var uri = ServletUriComponentsBuilder.fromCurrentRequest()
+        if (user == null)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(user.id())
                 .toUri();
@@ -51,25 +57,34 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> loginUser(@RequestBody LoginCommand loginCommand) {
         LoginResponse loginResponse = userService.loginUser(loginCommand.username(), loginCommand.password());
-        return ResponseEntity.ok(loginResponse);
+        if (loginResponse == null)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(loginResponse, HttpStatus.OK);
     }
 
     @PostMapping("/refresh")
     public ResponseEntity<RefreshResponse> refreshUserToken(@RequestBody RefreshCommand refreshCommand) {
         RefreshResponse refreshResponse = userService.refreshUserToken(refreshCommand.refreshToken());
-        return ResponseEntity.ok(refreshResponse);
+        if (refreshResponse == null)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(refreshResponse, HttpStatus.OK);
     }
 
     @GetMapping("/info/{id}")
     public ResponseEntity<UserDTO> getUserInfo(@PathVariable UUID id) {
         User user = userService.getUserById(id);
-        return ResponseEntity.ok(user.asUserDTO());
+        if (user == null)
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(user.asUserDTO(), HttpStatus.OK);
     }
 
     @GetMapping("/info")
     public ResponseEntity<UserDTO> getUserInfo(Authentication authentication) {
         UUID currentUserId = authenticationService.getCurrentUserId(authentication);
-        return ResponseEntity.ok(userService.getUserById(currentUserId).asUserDTO());
+        User user = userService.getUserById(currentUserId);
+        if (user == null)
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(user.asUserDTO(), HttpStatus.OK);
     }
 
     @PutMapping(path="/info", consumes = "multipart/form-data")
@@ -79,6 +94,8 @@ public class UserController {
                 @RequestParam(value = "image", required = false) MultipartFile image) {
         UUID currentUserId = authenticationService.getCurrentUserId(authentication);
         User user = userService.updateUserInfo(currentUserId, updateInfoCommand, image);
-        return ResponseEntity.status(HttpStatus.CREATED).body(user.asUserDTO());
+        if (user == null)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(user.asUserDTO(), HttpStatus.OK);
     }
 }

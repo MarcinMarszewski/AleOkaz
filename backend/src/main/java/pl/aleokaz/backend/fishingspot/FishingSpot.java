@@ -54,7 +54,7 @@ public class FishingSpot {
     public FishingSpotDTO asFishingSpotDTO() {
         List<PostDTO> postDtos = new ArrayList<PostDTO>();
 
-        for (final var post : posts()) {
+        for (Post post : posts()) {
             postDtos.add(post.asPostDTO());
         }
 

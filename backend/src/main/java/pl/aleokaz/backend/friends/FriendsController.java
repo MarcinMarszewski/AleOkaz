@@ -17,6 +17,8 @@ import pl.aleokaz.backend.friends.commands.FriendCommand;
 import pl.aleokaz.backend.security.AuthenticationService;
 import pl.aleokaz.backend.util.ResponseMsgDTO;
 
+//TODO: Wont refactor this module, since its planned to be fully reworked
+
 //TODO: Add error handling with @ControllerAdvice
 @RestController
 @RequestMapping("/api/friends")

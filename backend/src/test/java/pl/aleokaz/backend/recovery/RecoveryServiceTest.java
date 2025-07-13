@@ -23,7 +23,6 @@ import org.mockito.quality.Strictness;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import pl.aleokaz.backend.mail.MailingService;
-import pl.aleokaz.backend.recovery.commands.RecoveryCommand;
 import pl.aleokaz.backend.recovery.commands.ResetPasswordCommand;
 import pl.aleokaz.backend.user.User;
 import pl.aleokaz.backend.user.UserRole;
@@ -77,9 +76,7 @@ public class RecoveryServiceTest {
     public void shouldCreateAndSendRecoveryTokenWhenNoneExists() {
         when(tokenRepository.findByUserId(userId))
                 .thenReturn(null);
-        RecoveryCommand recoveryCommand = RecoveryCommand.builder()
-                .email("user@mail.com").build();
-        recoveryService.createAndSendRecoveryToken(recoveryCommand);
+        recoveryService.createAndSendRecoveryToken("user@mail.com");
         verify(mailingService)
                 .sendEmail(eq("user@mail.com"),eq("Recovery token"),anyString());
     }
@@ -88,9 +85,7 @@ public class RecoveryServiceTest {
     public void shouldDeleteOldTokenAndCreateNewWhenAnotherTokenExists() {
         when(tokenRepository.findByUserId(userId))
                 .thenReturn(recoveryToken);
-        RecoveryCommand recoveryCommand = RecoveryCommand.builder()
-                .email("user@mail.com").build();
-        recoveryService.createAndSendRecoveryToken(recoveryCommand);
+        recoveryService.createAndSendRecoveryToken("user@mail.com");
         verify(mailingService)
                 .sendEmail(eq("user@mail.com"),eq("Recovery token"),anyString());
         verify(tokenRepository).delete(any(RecoveryToken.class));

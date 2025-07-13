@@ -14,7 +14,7 @@ public class InteractionService {
 
     public Interaction getInteractionById(UUID interactionId) {
         return interactionRepository.findById(interactionId)
-                .orElseThrow(() -> new InteractionNotFoundException("Interaction not found with ID: " + interactionId));
+                .orElseThrow(() -> new InteractionNotFoundException("id", interactionId.toString()));
     }
 
     public void saveInteraction(Interaction interaction) {

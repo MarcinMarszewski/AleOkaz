@@ -27,6 +27,11 @@ public class CommentService {
     @Autowired
     private InteractionService interactionService;
 
+    public Comment getCommentById(@NonNull UUID commentId) {
+        return commentRepository.findById(commentId)
+                .orElseThrow(() -> new CommentNotFoundException("id", commentId.toString()));
+    }
+    
     public Comment createComment(@NonNull UUID userId, @NonNull UUID parentInteractionId, @NonNull String content) {
         User user = userService.getUserById(userId);
         Interaction parentInteraction = interactionService.getInteractionById(parentInteractionId);
@@ -45,7 +50,7 @@ public class CommentService {
         Comment comment = getCommentById(commentId);
 
         user.verifyAs(comment.author());
-        
+
         comment.content(newContent);
         comment.editedAt(new Date());
         return commentRepository.save(comment);
@@ -60,10 +65,5 @@ public class CommentService {
         comment.content("This comment has been deleted.");
         comment.editedAt(new Date());
         return commentRepository.save(comment);
-    }
-
-    public Comment getCommentById(@NonNull UUID commentId) {
-        return commentRepository.findById(commentId)
-                .orElseThrow(() -> new CommentNotFoundException("id", commentId.toString()));
     }
 }

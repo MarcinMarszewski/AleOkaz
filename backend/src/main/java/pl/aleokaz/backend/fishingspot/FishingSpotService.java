@@ -27,23 +27,9 @@ public class FishingSpotService {
 
     private final GeometryFactory geometryFactory = new GeometryFactory();
 
-    public FishingSpot createFishingSpot(UUID userId, FishingSpotCommand fishingSpotCommand) {
-        User owner = userService.getUserById(userId);
-        Point location = geometryFactory.createPoint(new Coordinate(fishingSpotCommand.longitude(), fishingSpotCommand.latitude()));
-
-        FishingSpot fishingSpot = FishingSpot.builder()
-            .name(fishingSpotCommand.name())
-            .description(fishingSpotCommand.description())
-            .owner(owner)
-            .location(location)
-            .build();
-
-        return fishingSpotRepository.save(fishingSpot);
-    }
-
     public FishingSpot getFishingSpotById(UUID id) {
         return fishingSpotRepository.findById(id)
-            .orElseThrow(() -> new FishingSpotNotFoundException(id));
+            .orElseThrow(() -> new FishingSpotNotFoundException("id", id.toString()));
     }
 
     public List<FishingSpot> getAllFishingSpots() {
@@ -61,6 +47,26 @@ public class FishingSpotService {
     public List<FishingSpot> getPostedInFishingSpots(UUID userId) {
         User owner = userService.getUserById(userId);
         return fishingSpotRepository.findByUserPosts(owner.id());
+    }
+    
+    public List<FishingSpotDTO> fishingSpotsAsFishingSpotDTOs(List<FishingSpot> fishingSpots) {
+        return fishingSpots.stream()
+            .map(FishingSpot::asFishingSpotDTO)
+            .toList();
+    }
+    
+    public FishingSpot createFishingSpot(UUID userId, FishingSpotCommand fishingSpotCommand) {
+        User owner = userService.getUserById(userId);
+        Point location = geometryFactory.createPoint(new Coordinate(fishingSpotCommand.longitude(), fishingSpotCommand.latitude()));
+
+        FishingSpot fishingSpot = FishingSpot.builder()
+            .name(fishingSpotCommand.name())
+            .description(fishingSpotCommand.description())
+            .owner(owner)
+            .location(location)
+            .build();
+
+        return fishingSpotRepository.save(fishingSpot);
     }
 
     public FishingSpot updateFishingSpot(UUID userId, UUID id, FishingSpotUpdateCommand fishingSpotUpdateCommand) {
@@ -81,11 +87,5 @@ public class FishingSpotService {
         }
 
         return fishingSpotRepository.save(fishingSpot);
-    }
-
-    public List<FishingSpotDTO> fishingSpotsAsFishingSpotDTOs(List<FishingSpot> fishingSpots) {
-        return fishingSpots.stream()
-            .map(FishingSpot::asFishingSpotDTO)
-            .toList();
     }
 }

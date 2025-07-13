@@ -1,14 +1,11 @@
 package pl.aleokaz.backend.fishingspot.exceptions;
 
-import java.util.UUID;
-
 public class FishingSpotNotFoundException extends RuntimeException {
-    public FishingSpotNotFoundException(UUID id) {
-        super("Fishing Spot with id " + id + " not found");
+    public FishingSpotNotFoundException(String field, String value) {
+        super(formatMessage(field, value), null);
     }
 
-    public FishingSpotNotFoundException(String message) {
-        super(message);
+    private static String formatMessage(String field, String value) {
+        return String.format("Fishing spot with field %s and value %s doesn't exist.", field, value);
     }
-    
 }

@@ -7,5 +7,6 @@ import lombok.Data;
 @Builder
 public class FishingSpotLocationCommand {
     private double latitude;
+    
     private double longitude;
 }

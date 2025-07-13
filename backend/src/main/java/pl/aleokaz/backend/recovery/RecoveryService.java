@@ -7,16 +7,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import io.micrometer.common.lang.NonNull;
+import jakarta.transaction.Transactional;
 import pl.aleokaz.backend.user.UserService;
-import pl.aleokaz.backend.user.exceptions.UserNotFoundException;
 import pl.aleokaz.backend.mail.MailingService;
-import pl.aleokaz.backend.recovery.commands.CheckTokenCommand;
 import pl.aleokaz.backend.recovery.commands.RecoveryCommand;
 import pl.aleokaz.backend.recovery.commands.ResetPasswordCommand;
 import pl.aleokaz.backend.recovery.exceptions.TokenNotFoundException;
 import pl.aleokaz.backend.user.User;
 
 @Service
+@Transactional
 public class RecoveryService {
 
     @Value("${recovery.token.expiration.minutes}")
@@ -34,32 +34,34 @@ public class RecoveryService {
     @Autowired
     private MailingService mailingService;
 
-    public RecoveryService() {
-        super();
-    }
+    public void createAndSendRecoveryToken(String email) {
+        User user = userService.getUserByEmail(email);
 
-    public void createAndSendRecoveryToken(RecoveryCommand recoveryCommand) {
-        RecoveryToken recoveryToken = createRecoveryToken(recoveryCommand);
+        RecoveryToken recoveryToken = RecoveryToken.builder()
+                .token(generateToken())
+                .expirationDate(LocalDateTime.now().plusMinutes(tokenExpirationMinutes))
+                .user(user)
+                .build();
 
-        mailingService.sendEmail(recoveryCommand.email(),
+        RecoveryToken existingToken = tokenRepository.findByUserId(user.id());
+        if (existingToken != null) {
+            tokenRepository.delete(existingToken);
+        }
+        tokenRepository.save(recoveryToken);
+
+        mailingService.sendEmail(email,
                 "Recovery token",
                 "Your recovery token is: " + recoveryToken.token());
     }
 
-    public boolean verifyRecoveryToken(CheckTokenCommand checkTokenCommand)
-            throws UserNotFoundException, TokenNotFoundException {
-        return isTokenCorrect(checkTokenCommand.email(), checkTokenCommand.token());
-    }
-
-    public boolean resetPassword(ResetPasswordCommand resetPasswordCommand) {
-        if (isTokenCorrect(resetPasswordCommand.email(), resetPasswordCommand.token())) {
-            User user = userService.getUserByEmail(resetPasswordCommand.email());
-            userService.setUserPassword(user, resetPasswordCommand.password());
-            RecoveryToken recoveryToken = tokenRepository.findByUserId(user.id());
-            tokenRepository.delete(recoveryToken);
-            return true;
-        }
-        return false;
+    public void resetPassword(ResetPasswordCommand resetPasswordCommand) {
+        if (!isTokenCorrect(resetPasswordCommand.email(), resetPasswordCommand.token()))
+            return;
+        User user = userService.getUserByEmail(resetPasswordCommand.email());
+        userService.setUserPassword(user, resetPasswordCommand.password());
+        RecoveryToken recoveryToken = tokenRepository.findByUserId(user.id());
+        tokenRepository.delete(recoveryToken);
+        //TODO: use exception?
     }
 
     public RecoveryToken createRecoveryToken(RecoveryCommand recoveryCommand) {
@@ -96,11 +98,10 @@ public class RecoveryService {
         }
         if (recoveryToken.token().equals(token)) {
             return true;
-        } else {
-            recoveryToken.attempts(recoveryToken.attempts() + 1);
-            tokenRepository.save(recoveryToken);
-            return false;
         }
+        recoveryToken.attempts(recoveryToken.attempts() + 1);
+        tokenRepository.save(recoveryToken);
+        return false;
     }
 
     private String generateToken() {

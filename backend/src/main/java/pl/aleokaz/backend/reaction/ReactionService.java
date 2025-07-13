@@ -49,9 +49,9 @@ public class ReactionService {
     }
 
     public ReactionsDTO reactionsAsReactionsDto(Set<Reaction> reactions, User user) {
-        final var result = new ReactionsDTO();
+        ReactionsDTO result = new ReactionsDTO();
 
-        for (final var reaction : reactions) {
+        for (Reaction reaction : reactions) {
             if (reaction.author().equals(user)) {
                 result.userReaction(reaction.type());
             }

@@ -1,4 +1,4 @@
-package pl.aleokaz.backend.filter;
+package pl.aleokaz.backend.util;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 import jakarta.servlet.FilterChain;

@@ -39,14 +39,14 @@ public class Comment extends Interaction {
     }
 
     public CommentDTO asCommentDto() {
-        final var comments = new HashSet<CommentDTO>();
-        for (final var subcomment : comments()) {
-            comments.add(subcomment.asCommentDto());
+        Set<CommentDTO> commentsDtos = new HashSet<CommentDTO>();
+        for (Comment subcomment : comments()) {
+            commentsDtos.add(subcomment.asCommentDto());
         }
 
-        final var reactionsDto = new ReactionsDTO();
+        ReactionsDTO reactionsDto = new ReactionsDTO();
 
-        for (final var reaction : reactions()) {
+        for (Reaction reaction : reactions()) {
             if (reaction.author().equals(author())) {
                 reactionsDto.userReaction(reaction.type());
             }
@@ -67,7 +67,7 @@ public class Comment extends Interaction {
                 .editedAt(editedAt())
                 .authorId(author().id())
                 .reactions(reactionsDto)
-                .comments(comments)
+                .comments(commentsDtos)
                 .build();
     }
 }

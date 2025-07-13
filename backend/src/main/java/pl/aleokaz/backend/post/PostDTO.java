@@ -11,12 +11,12 @@ import java.util.UUID;
 
 @Builder
 public record PostDTO(
-    @NonNull UUID id,
-    @NonNull String content,
-    @NonNull String imageUrl,
-    @NonNull Date createdAt,
-    Date editedAt,
-    @NonNull UUID authorId,
-    @NonNull ReactionsDTO reactions,
-    @NonNull Set<CommentDTO> comments) {
+        @NonNull UUID id,
+        @NonNull String content,
+        @NonNull String imageUrl,
+        @NonNull Date createdAt,
+        Date editedAt,
+        @NonNull UUID authorId,
+        @NonNull ReactionsDTO reactions,
+        @NonNull Set<CommentDTO> comments) {
 }

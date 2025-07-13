@@ -4,21 +4,6 @@ Backend aplikacji dla wędkarzy AleOkaz.
 
 ## Użycie
 
-### Development
-
-```sh
-docker compose -f compose.yaml -f compose.development.yaml up --detach
-./mvnw spring-boot:run
-```
-
-### Produkcja
-
-```sh
-docker compose -f compose.yaml -f compose.production.yaml up --detach
-```
-
-## Instalacja
-
 ### Prerekwizyty
 
 - Git
@@ -32,6 +17,38 @@ git clone https://github.com/jgeb28/AleOkaz
 cd AleOkaz/backend
 cp .env.example .env
 ```
+
+### Development
+
+```sh
+docker compose -f compose.yaml -f compose.development.yaml up --detach
+./mvnw spring-boot:run
+```
+
+### Produkcja
+
+```sh
+docker compose -f compose.yaml -f compose.production.yaml up --detach
+```
+
+## Plan rozwoju
+
+### Rework działania modułu znajomych
+Rozdzielenie tabel dla zaproszeń i znajomych
+
+### Nowy model obsługi wyjątków
+
+### Faktyczna implementacja serwisu mailowego
+
+### Poprawa konteneryzacji aplikacji
+W tym wydzielenie przestrzeni dla serwisu zdjęć
+
+### Utworzenie interfejsu webowego
+W idealnym świecie dodatkowo rozwój wersji mobilnej
+
+### Upublicznienie aplikacji
+Planowane mechanizmy ciągłego rozwoju
+
 
 ## Endpointy
 

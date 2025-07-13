@@ -37,8 +37,23 @@ public class PostService {
     @Autowired
     private FishingSpotService fishingSpotService;
 
+    public List<Post> getPostsByAuthorId(UUID authorId) {
+        return postRepository.findByAuthorId(authorId);
+    }
+
+    public Post getPostByPostId(UUID postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(() -> new PostNotFoundException("id", postId.toString()));
+    }
+
+    public List<PostDTO> postsAsPostDtos(List<Post> posts) {
+        return posts.stream()
+                .map(Post::asPostDTO)
+                .collect(Collectors.toList());
+    }
+
     public Post createPost(@NonNull UUID userId, PostCommand postCommand, MultipartFile image)
-                throws ImageSaveException {
+            throws ImageSaveException {
         User author = userService.getUserById(userId);
         FishingSpot fishingSpot = fishingSpotService.getFishingSpotById(postCommand.fishingSpotId());
 
@@ -61,7 +76,7 @@ public class PostService {
     }
 
     public Post updatePost(@NonNull UUID userId, UUID postId, PostCommand postCommand)
-                throws AuthorizationException {
+            throws AuthorizationException {
         User author = userService.getUserById(userId);
         Post post = getPostByPostId(postId);
         author.verifyAs(post.author());
@@ -71,25 +86,10 @@ public class PostService {
     }
 
     public void deletePost(@NonNull UUID userId, UUID postId)
-                throws AuthorizationException {
+            throws AuthorizationException {
         User author = userService.getUserById(userId);
         Post post = getPostByPostId(postId);
         author.verifyAs(post.author());
         postRepository.delete(post);
-    }
-
-    public List<Post> getPostsByAuthorId(UUID authorId) {
-        return postRepository.findByAuthorId(authorId);
-    }
-
-    public Post getPostByPostId(UUID postId) {
-        return postRepository.findById(postId)
-                .orElseThrow(() -> new PostNotFoundException(postId.toString()));
-    }
-
-    public List<PostDTO> postsAsPostDtos(List<Post> posts) {
-        return posts.stream()
-                .map(Post::asPostDTO)
-                .collect(Collectors.toList());
     }
 }

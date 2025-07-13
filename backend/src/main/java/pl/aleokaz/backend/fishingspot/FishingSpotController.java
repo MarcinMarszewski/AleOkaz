@@ -13,7 +13,9 @@ import pl.aleokaz.backend.security.AuthenticationService;
 
 import java.util.List;
 import java.util.UUID;
-
+// TODO: Controller rework
+// /api/fishingspots GET - get all
+// /api/fishingspots/sorted GET - get all sorted by distance
 @RestController
 @RequestMapping("/api/fishingspots")
 public class FishingSpotController {
@@ -30,61 +32,61 @@ public class FishingSpotController {
     }
 
     @GetMapping("/allsorted")
-    public ResponseEntity<List<FishingSpotDTO>> getAllFishingSpotsSortedByDistance(@RequestBody FishingSpotLocationCommand fishingSpotLocationCommand) {
+    public ResponseEntity<List<FishingSpotDTO>> getAllFishingSpotsSortedByDistance(
+                @RequestBody FishingSpotLocationCommand fishingSpotLocationCommand) {
         double lon = fishingSpotLocationCommand.longitude();
         double lat = fishingSpotLocationCommand.latitude();
         List<FishingSpot> spotsSorted = fishingSpotService.getAllFishingSpotsSortedByDistance(lon, lat);
-
-        if (spotsSorted != null) 
-            return new ResponseEntity<>(fishingSpotService.fishingSpotsAsFishingSpotDTOs(spotsSorted), HttpStatus.OK);
-        else 
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND); //TODO: NOT FOUND is for non existant resource, not empty one
+        if (spotsSorted == null || spotsSorted.isEmpty())
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(fishingSpotService.fishingSpotsAsFishingSpotDTOs(spotsSorted), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<FishingSpotDTO> getFishingSpotById(@PathVariable UUID id) {
         FishingSpot fishingSpot = fishingSpotService.getFishingSpotById(id);
-        return ResponseEntity.ok(fishingSpot.asFishingSpotDTO());
+        if (fishingSpot == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(fishingSpot.asFishingSpotDTO(), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<FishingSpotDTO> createFishingSpot(Authentication authentication, @RequestBody FishingSpotCommand fishingSpotCommand) {
+    public ResponseEntity<FishingSpotDTO> createFishingSpot(Authentication authentication,
+                @RequestBody FishingSpotCommand fishingSpotCommand) {
         UUID currentUserId = authenticationService.getCurrentUserId(authentication);
-
         FishingSpot createdFishingSpot = fishingSpotService.createFishingSpot(currentUserId, fishingSpotCommand);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdFishingSpot.asFishingSpotDTO());
+        if (createdFishingSpot == null)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(createdFishingSpot.asFishingSpotDTO(), HttpStatus.CREATED);
     }
 
     @GetMapping("/closest")
-    public ResponseEntity<FishingSpotDTO> getFishingSpotClosest(@RequestBody FishingSpotLocationCommand fishingSpotLocationCommand) {
+    public ResponseEntity<FishingSpotDTO> getFishingSpotClosest(
+                @RequestBody FishingSpotLocationCommand fishingSpotLocationCommand) {
         double lon = fishingSpotLocationCommand.longitude();
         double lat = fishingSpotLocationCommand.latitude();
         FishingSpot closestFishingSpot = fishingSpotService.getClosestFishingSpot(lon, lat);
-
-        if (closestFishingSpot != null) 
-            return new ResponseEntity<>(closestFishingSpot.asFishingSpotDTO(), HttpStatus.OK);
-        else 
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND); //again, not found
+        if (closestFishingSpot == null)
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(closestFishingSpot.asFishingSpotDTO(), HttpStatus.OK);
     }
 
     @GetMapping("/postedIn")
     public ResponseEntity<List<FishingSpotDTO>> getPostedInFishingSpots(Authentication authentication) {
         UUID currentUserId = authenticationService.getCurrentUserId(authentication);
-
         List<FishingSpot> fishingSpots = fishingSpotService.getPostedInFishingSpots(currentUserId);
-
-        if (fishingSpots != null) 
-            return new ResponseEntity<>(fishingSpotService.fishingSpotsAsFishingSpotDTOs(fishingSpots), HttpStatus.OK);
-        else 
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND); //
+        if (fishingSpots == null || fishingSpots.isEmpty())
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(fishingSpotService.fishingSpotsAsFishingSpotDTOs(fishingSpots), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<FishingSpotDTO> updateFishingSpot(Authentication authentication, @PathVariable UUID id, @RequestBody FishingSpotUpdateCommand fishingSpotUpdateCommand) {
+    public ResponseEntity<FishingSpotDTO> updateFishingSpot(Authentication authentication, @PathVariable UUID id,
+                @RequestBody FishingSpotUpdateCommand fishingSpotUpdateCommand) {
         UUID currentUserId = authenticationService.getCurrentUserId(authentication);
-
         FishingSpot fishingSpot = fishingSpotService.updateFishingSpot(currentUserId, id, fishingSpotUpdateCommand);
-
+        if (fishingSpot == null)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(fishingSpot.asFishingSpotDTO(), HttpStatus.OK);
     }
 }

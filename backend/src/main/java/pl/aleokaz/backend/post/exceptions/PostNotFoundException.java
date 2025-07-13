@@ -1,11 +1,11 @@
 package pl.aleokaz.backend.post.exceptions;
 
 public class PostNotFoundException extends RuntimeException {
-    public PostNotFoundException(String postId) {
-        super("Post with ID " + postId + " not found");
+    public PostNotFoundException(String field, String value) {
+        super(formatMessage(field, value), null);
     }
 
-    public PostNotFoundException() {
-        super("Post not found");
+    private static String formatMessage(String field, String value) {
+        return String.format("Post with field %s and value %s doesn't exist.", field, value);
     }
 }
