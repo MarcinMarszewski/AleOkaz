@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import pl.aleokaz.backend.user.User;
 
+//TODO: rework way friendship is represented in database
+
 @Entity
 @Table(name = "user_friends")
 @Data
@@ -33,7 +35,7 @@ public class Friendship {
         return userID.equals(currentUserId) ? friendID : userID;
     }
 
-    public FriendDTO toFriendDTO(UUID currentUserId){
+    public FriendDTO toFriendDTO(UUID currentUserId) {
         boolean isSender = user().id().equals(currentUserId);
         User other = isSender ? friend() : user();
         return FriendDTO.builder()

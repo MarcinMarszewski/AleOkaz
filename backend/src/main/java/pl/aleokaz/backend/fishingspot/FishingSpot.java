@@ -4,6 +4,7 @@ import org.locationtech.jts.geom.Point;
 import jakarta.persistence.*;
 import lombok.*;
 import pl.aleokaz.backend.post.Post;
+import pl.aleokaz.backend.post.PostDTO;
 import pl.aleokaz.backend.user.User;
 
 import java.util.*;
@@ -20,7 +21,8 @@ public class FishingSpot {
     @NonNull
     private String name;
 
-    private String description="";
+    @Builder.Default
+    private String description = "";
 
     @OneToOne
     @JoinColumn(name = "owner_id", nullable = false)
@@ -49,4 +51,21 @@ public class FishingSpot {
         }
     }
 
+    public FishingSpotDTO asFishingSpotDTO() {
+        List<PostDTO> postDtos = new ArrayList<PostDTO>();
+
+        for (Post post : posts()) {
+            postDtos.add(post.asPostDTO());
+        }
+
+        return FishingSpotDTO.builder()
+            .id(id())
+            .name(name())
+            .description(description())
+            .ownerId(owner().id())
+            .latitude(location().getY())
+            .longitude(location().getX())
+            .posts(postDtos)
+            .build();
+    }
 }

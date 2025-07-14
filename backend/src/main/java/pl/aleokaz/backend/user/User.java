@@ -1,12 +1,9 @@
 package pl.aleokaz.backend.user;
 
-import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import org.springframework.core.env.Environment;
-import pl.aleokaz.backend.friends.Friendship;
 
 import org.hibernate.validator.constraints.UniqueElements;
 
@@ -20,12 +17,9 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
-import pl.aleokaz.backend.post.ImageService;
 import pl.aleokaz.backend.post.Post;
+import pl.aleokaz.backend.security.AuthorizationException;
 
 import java.util.HashSet;
 import java.util.List;
@@ -80,5 +74,20 @@ public class User {
         this.password = password;
         this.roles = new HashSet<>(roles);
         this.profilePicture = profilePicture;
+    }
+
+    public void verifyAs(User user) {
+        if (!this.id.equals(user.id)) {
+            throw new AuthorizationException(id().toString());
+        }
+    }
+
+    public UserDTO asUserDTO() {
+        return UserDTO.builder()
+                .id(id)
+                .username(username)
+                .email(email)
+                .profilePicture(profilePicture)
+                .build();
     }
 }
