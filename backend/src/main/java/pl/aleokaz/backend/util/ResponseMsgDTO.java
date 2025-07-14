@@ -5,5 +5,5 @@ import lombok.Builder;
 
 @Builder
 public record ResponseMsgDTO(
-                @NotNull String message) {
+        @NotNull String message) {
 }

@@ -77,7 +77,7 @@ public class UserService {
 
     public User getUserById(@NonNull UUID id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(id));
+                .orElseThrow(() -> new UserNotFoundException("id", id.toString()));
     }
 
     public User getUserByEmail(@NonNull String email) {
@@ -178,7 +178,7 @@ public class UserService {
                 .build();
             return refreshResponse;
         } else {
-            throw new UserNotFoundException(userId);
+            throw new UserNotFoundException("id", userId.toString());
         }
     }
 

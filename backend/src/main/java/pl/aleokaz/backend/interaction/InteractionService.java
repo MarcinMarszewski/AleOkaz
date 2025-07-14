@@ -17,7 +17,7 @@ public class InteractionService {
                 .orElseThrow(() -> new InteractionNotFoundException("id", interactionId.toString()));
     }
 
-    public void saveInteraction(Interaction interaction) {
-        interactionRepository.save(interaction);
+    public Interaction saveInteraction(Interaction interaction) {
+        return interactionRepository.save(interaction);
     }
 }

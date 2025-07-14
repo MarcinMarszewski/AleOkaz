@@ -18,7 +18,7 @@ public class RecoveryController {
     @Autowired
     private RecoveryService recoveryService;
 
-    @PostMapping("/get")
+    @PostMapping("/generate")
     public ResponseEntity<ResponseMsgDTO> createAndSendRecoveryToken(@RequestBody RecoveryCommand recoveryCommand) {
         recoveryService.createAndSendRecoveryToken(recoveryCommand.email());
         return ResponseEntity.ok().body(ResponseMsgDTO.builder().message("Recovery code sent.").build());

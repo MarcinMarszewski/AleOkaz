@@ -33,7 +33,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String path = httpRequest.getRequestURI();
 
         final var isPublicEndpoint = "GET".equals(method) &&
-            (path.startsWith("/api/posts") || path.startsWith("/api/users/info") || path.startsWith("/api/friends/allof") || path.startsWith("/api/fishingspots"));
+            (path.startsWith("/api/posts") || path.startsWith("/api/users/info") || path.startsWith("/api/friends/allof") || path.startsWith("/api/fishingspots")); 
+            //TODO: move into some data structure, optionally include "public" in unauthorized endpoints
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7); // Remove "Bearer " prefix
