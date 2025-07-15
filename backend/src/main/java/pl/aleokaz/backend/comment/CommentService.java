@@ -7,6 +7,7 @@ import pl.aleokaz.backend.user.User;
 import pl.aleokaz.backend.user.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
@@ -26,6 +27,9 @@ public class CommentService {
 
     @Autowired
     private InteractionService interactionService;
+
+    @Value("${aleokaz.comment.deleted.content}")
+    private String deletedCommentContent;
 
     public Comment getCommentById(@NonNull UUID commentId) {
         return commentRepository.findById(commentId)
@@ -62,7 +66,7 @@ public class CommentService {
 
         user.verifyAs(comment.author());
         comment.author(null);
-        comment.content("This comment has been deleted.");
+        comment.content(deletedCommentContent);
         comment.editedAt(new Date());
         return commentRepository.save(comment);
     }
