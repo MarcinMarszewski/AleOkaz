@@ -45,7 +45,6 @@ public abstract class Interaction {
 
     @ManyToOne
     @JoinColumn(name = "author_id", nullable = false)
-    @NonNull
     private User author;
 
     @OneToMany(mappedBy = "interaction", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -61,7 +60,7 @@ public abstract class Interaction {
             @NonNull String content,
             @NonNull Date createdAt,
             Date editedAt,
-            @NonNull User author,
+            User author,
             Set<Reaction> reactions,
             Set<Comment> comments) {
         this.id = id;

@@ -108,11 +108,9 @@ PUT     /api/posts/{postId}/reactions                          Dodanie reakcji d
 DELETE  /api/posts/{postId}/reactions                          Usunięcie reakcji do posta.
 
 ### Komentarze
-POST    /api/comments                   {parentId,content}     Tworzenie komentarza.
-PUT     /api/comments/{commentId}       {content}              Aktualizacja komentarza.
-DELETE  /api/comments/{commentId}                              Usunięcie komentarza.
-PUT     /api/comments/{commentId}/reactions                    Dodanie reakcji do komentarza.
-DELETE  /api/comments/{commentId}/reactions                    Usunięcie reakcji do komentarza.
+POST    /api/comment/{parentId}         {content}               Tworzenie komentarza.
+PUT     /api/comment/{commentId}        {content}               Aktualizacja komentarza.
+DELETE  /api/comment/{commentId}                                Usunięcie komentarza.
 
 ### Łowiska
 GET     /api/fishingspots/all                                  Zwraca wszystkie łowiska

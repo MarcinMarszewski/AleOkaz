@@ -11,13 +11,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
-// TODO: Controller rework
-// /api/comment/{id} dla wszystkich operacji
-// usunięcie id z komend
 
 //TODO: Add error handling with @ControllerAdvice
 @RestController
-@RequestMapping("/api/comments")
+@RequestMapping("/api/comment")
 public class CommentController {
     @Autowired
     private AuthenticationService authenticationService;
@@ -25,14 +22,13 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
 
-    @PostMapping
+    @PostMapping("/{parentId}")
     public ResponseEntity<CommentDTO> createComment(Authentication authentication,
-                @RequestBody CreateCommentCommand createCommentCommand) {
+                @RequestBody CreateCommentCommand createCommentCommand,
+                @PathVariable UUID parentId) {
         UUID currentUserId = authenticationService.getCurrentUserId(authentication);
-        Comment comment = commentService.createComment(currentUserId, createCommentCommand.parentId(),
+        Comment comment = commentService.createComment(currentUserId, parentId,
                 createCommentCommand.content());
-        if (comment == null)
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(comment.asCommentDto(), HttpStatus.CREATED);
     }
 
