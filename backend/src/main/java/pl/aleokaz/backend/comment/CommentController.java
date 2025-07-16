@@ -29,8 +29,6 @@ public class CommentController {
         UUID currentUserId = authenticationService.getCurrentUserId(authentication);
         Comment comment = commentService.createComment(currentUserId, parentId,
                 createCommentCommand.content());
-        if (comment == null)
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(comment.asCommentDto(), HttpStatus.CREATED);
     }
 
