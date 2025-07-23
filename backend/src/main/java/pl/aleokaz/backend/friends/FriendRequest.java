@@ -6,40 +6,32 @@ import jakarta.persistence.*;
 import lombok.*;
 import pl.aleokaz.backend.user.User;
 
-//TODO: rework way friendship is represented in database
-
 @Entity
 @Table(name = "user_friends")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Friendship {
+public class FriendRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private User sender;
 
     @ManyToOne
     @JoinColumn(name = "friend_id")
-    private User friend;
+    private User reciever;
 
-    public Friendship(User user, User friend) {
-        this.user = user;
-        this.friend = friend;
+    public FriendRequest(User sender, User reciever) {
+        this.sender = sender;
+        this.reciever = reciever;
     }
     
-    public UUID getFriendId(UUID currentUserId) {
-        UUID userID = user().id();
-        UUID friendID = friend().id();
-        return userID.equals(currentUserId) ? friendID : userID;
-    }
-
     public FriendDTO toFriendDTO(UUID currentUserId) {
-        boolean isSender = user().id().equals(currentUserId);
-        User other = isSender ? friend() : user();
+        boolean isSender = sender.id().equals(currentUserId);
+        User other = isSender ? reciever : sender;
         return FriendDTO.builder()
                 .username(other.username())
                 .avatar_url(other.profilePicture())

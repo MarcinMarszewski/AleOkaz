@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.NonNull;
 
 @Builder
-record FriendDTO(
-        @NonNull String username,
+record FriendRequestDTO(
+        @NonNull String from,
         @NonNull String avatar_url) {
 }

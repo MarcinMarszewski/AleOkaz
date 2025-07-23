@@ -23,7 +23,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.kafka.core.KafkaTemplate;
 
-import pl.aleokaz.backend.friends.commands.FriendCommand;
+import pl.aleokaz.backend.friends.commands.SendFriendRequestCommand;
 import pl.aleokaz.backend.user.User;
 import pl.aleokaz.backend.user.UserRole;
 import pl.aleokaz.backend.user.UserService;
@@ -74,7 +74,7 @@ class FriendsServiceTest {
         when(friendshipRepository.save(any(Friendship.class)))
                 .thenReturn(new Friendship(mockUser, mockFriend, false));
 
-        FriendCommand friendCommand = FriendCommand.builder().username("friendUser").build();
+        SendFriendRequestCommand friendCommand = SendFriendRequestCommand.builder().username("friendUser").build();
         var result = friendsService.addFriend(friendCommand, userId);
 
         assertThat(result).isEqualTo(FriendsService.FriendStatus.SENT_FRIEND_REQUEST);
@@ -86,7 +86,7 @@ class FriendsServiceTest {
         when(friendshipRepository.findSymmetricalFriendship(mockUser.id(), mockUser.id()))
                 .thenReturn(Optional.empty());
 
-        FriendCommand friendCommand = FriendCommand.builder().username("testUser").build();
+        SendFriendRequestCommand friendCommand = SendFriendRequestCommand.builder().username("testUser").build();
         var result = friendsService.addFriend(friendCommand, userId);
 
         assertThat(result).isEqualTo(FriendsService.FriendStatus.TRIED_TO_ADD_YOURSELF);
@@ -99,7 +99,7 @@ class FriendsServiceTest {
         when(friendshipRepository.findSymmetricalFriendship(mockUser.id(), mockFriend.id()))
                 .thenReturn(Optional.of(friendship));
 
-        FriendCommand friendCommand = FriendCommand.builder().username("friendUser").build();
+        SendFriendRequestCommand friendCommand = SendFriendRequestCommand.builder().username("friendUser").build();
         var result = friendsService.removeFriend(friendCommand, userId);
 
         assertThat(result).isEqualTo(FriendsService.FriendStatus.FRIEND_REMOVED);
@@ -111,7 +111,7 @@ class FriendsServiceTest {
         when(friendshipRepository.findSymmetricalFriendship(mockUser.id(), mockFriend.id()))
                 .thenReturn(Optional.empty());
 
-        FriendCommand friendCommand = FriendCommand.builder().username("friendUser").build();
+        SendFriendRequestCommand friendCommand = SendFriendRequestCommand.builder().username("friendUser").build();
         var result = friendsService.removeFriend(friendCommand, userId);
 
         assertThat(result).isEqualTo(FriendsService.FriendStatus.NO_FRIENDSHIP_TO_REMOVE);
@@ -124,7 +124,7 @@ class FriendsServiceTest {
         when(friendshipRepository.findSymmetricalFriendship(mockUser.id(), mockFriend.id()))
                 .thenReturn(Optional.of(friendship));
 
-        FriendCommand friendCommand = FriendCommand.builder().username("friendUser").build();
+        SendFriendRequestCommand friendCommand = SendFriendRequestCommand.builder().username("friendUser").build();
         var result = friendsService.addFriend(friendCommand, userId);
 
         assertThat(result).isEqualTo(FriendsService.FriendStatus.FRIENDSHIP_EXISTS);
@@ -139,7 +139,7 @@ class FriendsServiceTest {
         when(friendshipRepository.save(any(Friendship.class)))
                 .thenReturn(new Friendship(mockUser, mockFriend, true));
 
-        FriendCommand friendCommand = FriendCommand.builder().username("friendUser").build();
+        SendFriendRequestCommand friendCommand = SendFriendRequestCommand.builder().username("friendUser").build();
         var result = friendsService.addFriend(friendCommand, userId);
 
         assertThat(result).isEqualTo(FriendsService.FriendStatus.ACCEPTED_FRIEND_REQUEST);
@@ -152,7 +152,7 @@ class FriendsServiceTest {
         when(friendshipRepository.findSymmetricalFriendship(mockUser.id(), mockFriend.id()))
                 .thenReturn(Optional.of(friendship));
 
-        FriendCommand friendCommand = FriendCommand.builder().username("friendUser").build();
+        SendFriendRequestCommand friendCommand = SendFriendRequestCommand.builder().username("friendUser").build();
         var result = friendsService.addFriend(friendCommand, userId);
 
         assertThat(result).isEqualTo(FriendsService.FriendStatus.ALREADY_SENT_FRIEND_REQUEST);
@@ -165,7 +165,7 @@ class FriendsServiceTest {
         when(friendshipRepository.findSymmetricalFriendship(mockUser.id(), mockFriend.id()))
                 .thenReturn(Optional.of(friendship));
 
-        FriendCommand friendCommand = FriendCommand.builder().username("friendUser").build();
+        SendFriendRequestCommand friendCommand = SendFriendRequestCommand.builder().username("friendUser").build();
         var result = friendsService.addFriend(friendCommand, userId);
 
         assertThat(result).isEqualTo(FriendsService.FriendStatus.FRIENDSHIP_ALREADY_ACCEPTED);
@@ -179,7 +179,7 @@ class FriendsServiceTest {
                 .thenReturn(Optional.of(friendship));
         doNothing().when(friendshipRepository).delete(any(Friendship.class));
 
-        FriendCommand friendCommand = FriendCommand.builder().username("friendUser").build();
+        SendFriendRequestCommand friendCommand = SendFriendRequestCommand.builder().username("friendUser").build();
         var result = friendsService.deleteFriendRequest(friendCommand, userId);
 
         assertThat(result).isEqualTo(FriendsService.FriendStatus.REQUEST_DELETED);
@@ -191,7 +191,7 @@ class FriendsServiceTest {
         when(friendshipRepository.findSymmetricalFriendship(mockUser.id(), mockFriend.id()))
                 .thenReturn(Optional.empty());
 
-        FriendCommand friendCommand = FriendCommand.builder().username("friendUser").build();
+        SendFriendRequestCommand friendCommand = SendFriendRequestCommand.builder().username("friendUser").build();
         var result = friendsService.deleteFriendRequest(friendCommand, userId);
 
         assertThat(result).isEqualTo(FriendsService.FriendStatus.REQUEST_NOT_FOUND);

@@ -7,7 +7,7 @@ import lombok.NonNull;
 
 @Data
 @Builder
-public class FriendCommand {
+public class SendFriendRequestCommand {
     private Void _emptyField;
 
     @NonNull
