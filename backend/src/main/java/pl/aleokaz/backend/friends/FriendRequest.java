@@ -7,7 +7,7 @@ import lombok.*;
 import pl.aleokaz.backend.user.User;
 
 @Entity
-@Table(name = "user_friends")
+@Table(name = "user_friend_requests")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,11 +17,11 @@ public class FriendRequest {
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "sender_id")
     private User sender;
 
     @ManyToOne
-    @JoinColumn(name = "friend_id")
+    @JoinColumn(name = "reciever_id")
     private User reciever;
 
     public FriendRequest(User sender, User reciever) {

@@ -8,10 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import pl.aleokaz.backend.friends.commands.SendFriendRequestCommand;
+import pl.aleokaz.backend.friends.exceptions.FriendRequestNotFoundException;
+import pl.aleokaz.backend.friends.exceptions.FriendshipNotFoundException;
 import pl.aleokaz.backend.user.User;
 import pl.aleokaz.backend.user.UserService;
-import pl.aleokaz.backend.user.exceptions.UserNotFoundException;
 
 @Service
 public class FriendsService {
@@ -39,7 +39,7 @@ public class FriendsService {
     private FriendRequestRepository friendRequestRepository;
 
     @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
+    private KafkaTemplate<String, String> kafkaTemplate; //TODO: Add notifications
 
     public List<FriendRequest> getIncomingFriendRequests(UUID userId) {
         return friendRequestRepository.findAllByRecieverId(userId);
@@ -70,7 +70,7 @@ public class FriendsService {
     public void cancelFriendRequest(UUID senderId, UUID recieverId) {
         List<FriendRequest> friendRequest = friendRequestRepository.findAllByRecieverIdAndSenderId(senderId, recieverId);
         if (friendRequest.isEmpty()) {
-            throw new IllegalArgumentException("Friend request not found.");
+            throw new FriendRequestNotFoundException("reciever_id", recieverId.toString());
         }
         friendRequestRepository.delete(friendRequest.get(0));
     }
@@ -78,7 +78,7 @@ public class FriendsService {
     public Friendship acceptFriendRequest(UUID senderId, UUID recieverId) {
         List<FriendRequest> friendRequest = friendRequestRepository.findAllByRecieverIdAndSenderId(senderId, recieverId);
         if (friendRequest.isEmpty()) {
-            throw new IllegalArgumentException("Friend request not found.");
+            throw new FriendRequestNotFoundException("sender_id", senderId.toString());
         }
         FriendRequest request = friendRequest.get(0);
         User sender = request.sender();
@@ -91,7 +91,7 @@ public class FriendsService {
     public void denyFriendRequest(UUID senderId, UUID recieverId) {
         List<FriendRequest> friendRequest = friendRequestRepository.findAllByRecieverIdAndSenderId(senderId, recieverId);
         if (friendRequest.isEmpty()) {
-            throw new IllegalArgumentException("Friend request not found.");
+            throw new FriendRequestNotFoundException("sender_id", senderId.toString());
         }
         FriendRequest request = friendRequest.get(0);
         friendRequestRepository.delete(request);
@@ -111,10 +111,10 @@ public class FriendsService {
         return getFriends(user.id());
     }
 
-    public void removeFriend(UUID currentUserId, UUID frindId){
-        Optional<Friendship> friendship = friendshipRepository.findSymmetricalFriendship(currentUserId, frindId);
+    public void removeFriend(UUID currentUserId, UUID friendId){
+        Optional<Friendship> friendship = friendshipRepository.findSymmetricalFriendship(currentUserId, friendId);
         if (friendship.isEmpty()) {
-            throw new IllegalArgumentException("No friendship to remove.");
+            throw new FriendshipNotFoundException("friend_id", friendId.toString());
         }
         friendshipRepository.delete(friendship.get());
     }

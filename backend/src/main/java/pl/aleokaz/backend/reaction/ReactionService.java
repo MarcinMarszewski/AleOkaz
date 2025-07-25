@@ -9,15 +9,12 @@ import pl.aleokaz.backend.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import jakarta.transaction.Transactional;
-
 import lombok.NonNull;
 
 import java.util.Set;
 import java.util.UUID;
 
 @Service
-@Transactional
 public class ReactionService {
     @Autowired
     private UserService userService;
@@ -48,7 +45,7 @@ public class ReactionService {
         interactionService.saveInteraction(interaction);
     }
 
-    public ReactionsDTO reactionsAsReactionsDto(Set<Reaction> reactions, User user) {
+    public static ReactionsDTO reactionsAsReactionsDto(Set<Reaction> reactions, User user) {
         ReactionsDTO result = new ReactionsDTO();
 
         for (Reaction reaction : reactions) {
