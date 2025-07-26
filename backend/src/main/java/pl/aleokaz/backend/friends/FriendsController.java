@@ -34,14 +34,14 @@ public class FriendsController {
     public ResponseEntity<List<FriendDTO>> getFriends(Authentication authentication) {
         UUID currentUserId = authenticationService.getCurrentUserId(authentication);
         List<User> friends = friendsService.getFriends(currentUserId);
-        return new ResponseEntity<>(friendsService.usersAsFriendDtos(friends), HttpStatus.OK);
+        return new ResponseEntity<>(FriendsService.usersAsFriendDtos(friends), HttpStatus.OK);
     }
 
     @GetMapping("/{username}")
     public ResponseEntity<List<FriendDTO>> getFriendsOfUser(Authentication authentication, @PathVariable String username){
         UUID currentUserId = authenticationService.getCurrentUserId(authentication);
         List<User> friends = friendsService.getFriendsOfUser(username, currentUserId);
-        return new ResponseEntity<>(friendsService.usersAsFriendDtos(friends), HttpStatus.OK);
+        return new ResponseEntity<>(FriendsService.usersAsFriendDtos(friends), HttpStatus.OK);
     }
 
     @DeleteMapping("/{username}")
@@ -55,14 +55,14 @@ public class FriendsController {
     public ResponseEntity<List<FriendDTO>> getIncomingRequests(Authentication authentication) {
         UUID currentUserId = authenticationService.getCurrentUserId(authentication);
         List<FriendRequest> incomingRequests = friendsService.getIncomingFriendRequests(currentUserId);
-        return new ResponseEntity<>(friendsService.friendRequestsAsFriendDtos(incomingRequests, currentUserId), HttpStatus.OK);
+        return new ResponseEntity<>(FriendsService.friendRequestsAsFriendDtos(incomingRequests, currentUserId), HttpStatus.OK);
     }
 
     @GetMapping("/requests/sent")
     public ResponseEntity<List<FriendDTO>> getSentRequests(Authentication authentication) {
         UUID currentUserId = authenticationService.getCurrentUserId(authentication);
         List<FriendRequest> incomingRequests = friendsService.getSentFriendRequests(currentUserId);
-        return new ResponseEntity<>(friendsService.friendRequestsAsFriendDtos(incomingRequests, currentUserId), HttpStatus.OK);
+        return new ResponseEntity<>(FriendsService.friendRequestsAsFriendDtos(incomingRequests, currentUserId), HttpStatus.OK);
     }
 
     @PostMapping("/requests/send/{username}")

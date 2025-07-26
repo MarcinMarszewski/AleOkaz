@@ -33,9 +33,6 @@ docker compose -f compose.yaml -f compose.production.yaml up --detach
 
 ## Plan rozwoju
 
-### Rework działania modułu znajomych
-Rozdzielenie tabel dla zaproszeń i znajomych
-
 ### Nowy model obsługi wyjątków
 
 ### Faktyczna implementacja serwisu mailowego
