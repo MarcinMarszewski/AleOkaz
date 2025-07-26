@@ -26,9 +26,11 @@ public class Friendship {
     @JoinColumn(name = "friend_id")
     private User friend;
 
-    @Column(name = "is_active")
-    private boolean isActive;
-
+    public Friendship(User user, User friend) {
+        this.user = user;
+        this.friend = friend;
+    }
+    
     public UUID getFriendId(UUID currentUserId) {
         UUID userID = user().id();
         UUID friendID = friend().id();
@@ -39,17 +41,8 @@ public class Friendship {
         boolean isSender = user().id().equals(currentUserId);
         User other = isSender ? friend() : user();
         return FriendDTO.builder()
-                .id(other.id())
                 .username(other.username())
                 .avatar_url(other.profilePicture())
-                .is_accepted(isActive())
-                .is_sender(isSender)
                 .build();
-    }
-
-    public Friendship(User user, User friend, boolean isActive) {
-        this.user = user;
-        this.friend = friend;
-        this.isActive = isActive;
     }
 }

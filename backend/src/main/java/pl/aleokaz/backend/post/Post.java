@@ -16,16 +16,11 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 public class Post extends Interaction {
-    @Autowired
-    private ReactionService reactionService;
-
     @NonNull
     private String imageUrl;
 
@@ -63,7 +58,7 @@ public class Post extends Interaction {
                 .createdAt(createdAt())
                 .editedAt(editedAt())
                 .authorId(author().id())
-                .reactions(reactionService.reactionsAsReactionsDto(reactions(), author()))
+                .reactions(ReactionService.reactionsAsReactionsDto(reactions(), author()))
                 .comments(comments)
                 .build();
     }

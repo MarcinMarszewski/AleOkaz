@@ -25,4 +25,5 @@ public interface FriendshipRepository extends JpaRepository<Friendship, UUID> {
                     OR f.friend.id = :userId
             """)
     List<Friendship> findAllByUserId(@Param("userId") UUID userId);
+    boolean existsByUserIdAndFriendId(UUID userId, UUID friendId);
 }
