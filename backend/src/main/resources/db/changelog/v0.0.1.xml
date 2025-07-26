@@ -132,7 +132,7 @@
             <column name="sender_id" type="uuid">
                 <constraints nullable="false" />
             </column>
-            <column name="reciever_id" type="uuid">
+            <column name="receiver_id" type="uuid">
                 <constraints nullable="false" />
             </column>
         </createTable>
@@ -144,8 +144,8 @@
             referencedColumnNames="id" />
         <addForeignKeyConstraint
             baseTableName="user_friend_requests"
-            baseColumnNames="reciever_id"
-            constraintName="user_friend_requests_reciever_fk"
+            baseColumnNames="receiver_id"
+            constraintName="user_friend_requests_receiver_fk"
             referencedTableName="user"
             referencedColumnNames="id" />
     </changeSet>

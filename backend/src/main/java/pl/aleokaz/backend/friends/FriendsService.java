@@ -29,64 +29,64 @@ public class FriendsService {
     private KafkaTemplate<String, String> kafkaTemplate;
 
     public List<FriendRequest> getIncomingFriendRequests(UUID userId) {
-        return friendRequestRepository.findAllByRecieverId(userId);
+        return friendRequestRepository.findAllByReceiverId(userId);
     }
 
     public List<FriendRequest> getSentFriendRequests(UUID userId) {
         return friendRequestRepository.findAllBySenderId(userId);
     }
 
-    public FriendRequest sendFriendRequest(UUID senderId, UUID recieverId){
-        if (senderId.equals(recieverId)) {
+    public FriendRequest sendFriendRequest(UUID senderId, UUID receiverId){
+        if (senderId.equals(receiverId)) {
             throw new IllegalArgumentException("You cannot send a friend request to yourself.");
         }
-        if (friendRequestRepository.existsBySenderIdAndRecieverId(senderId, recieverId)) {
+        if (friendRequestRepository.existsBySenderIdAndReceiverId(senderId, receiverId)) {
             throw new IllegalArgumentException("Friend request already sent.");
         }
-        if (friendshipRepository.existsByUserIdAndFriendId(senderId, recieverId)) {
+        if (friendshipRepository.existsByUserIdAndFriendId(senderId, receiverId)) {
             throw new IllegalArgumentException("Friendship already exists.");
         }
 
         User sender = userService.getUserById(senderId);
-        User reciever = userService.getUserById(recieverId);
+        User receiver = userService.getUserById(receiverId);
 
-        FriendRequest friendRequest = new FriendRequest(sender, reciever);
+        FriendRequest friendRequest = new FriendRequest(sender, receiver);
         friendRequest = friendRequestRepository.save(friendRequest);
-        kafkaTemplate.send(reciever.id().toString(), "New friend request from " + sender.username());
+        kafkaTemplate.send(receiver.id().toString(), "New friend request from " + sender.username());
         return friendRequest;
     }
 
-    public void cancelFriendRequest(UUID senderId, UUID recieverId) {
-        List<FriendRequest> friendRequest = friendRequestRepository.findAllByRecieverIdAndSenderId(senderId, recieverId);
+    public void cancelFriendRequest(UUID senderId, UUID receiverId) {
+        List<FriendRequest> friendRequest = friendRequestRepository.findAllByReceiverIdAndSenderId(senderId, receiverId);
         if (friendRequest.isEmpty()) {
-            throw new FriendRequestNotFoundException("reciever_id", recieverId.toString());
+            throw new FriendRequestNotFoundException("receiver_id", receiverId.toString());
         }
         friendRequestRepository.delete(friendRequest.get(0));
     }
 
-    public Friendship acceptFriendRequest(UUID senderId, UUID recieverId) {
-        List<FriendRequest> friendRequest = friendRequestRepository.findAllByRecieverIdAndSenderId(senderId, recieverId);
+    public Friendship acceptFriendRequest(UUID senderId, UUID receiverId) {
+        List<FriendRequest> friendRequest = friendRequestRepository.findAllByReceiverIdAndSenderId(senderId, receiverId);
         if (friendRequest.isEmpty()) {
             throw new FriendRequestNotFoundException("sender_id", senderId.toString());
         }
         FriendRequest request = friendRequest.get(0);
         User sender = request.sender();
-        User reciever = request.reciever();
-        Friendship friendship = new Friendship(sender, reciever);
+        User receiver = request.receiver();
+        Friendship friendship = new Friendship(sender, receiver);
         friendRequestRepository.delete(request);
         friendship = friendshipRepository.save(friendship);
-        kafkaTemplate.send(sender.id().toString(), "Friend request accepted by " + reciever.username());
+        kafkaTemplate.send(sender.id().toString(), "Friend request accepted by " + receiver.username());
         return friendship;
     }
 
-    public void denyFriendRequest(UUID senderId, UUID recieverId) {
-        List<FriendRequest> friendRequest = friendRequestRepository.findAllByRecieverIdAndSenderId(senderId, recieverId);
+    public void denyFriendRequest(UUID senderId, UUID receiverId) {
+        List<FriendRequest> friendRequest = friendRequestRepository.findAllByReceiverIdAndSenderId(senderId, receiverId);
         if (friendRequest.isEmpty()) {
             throw new FriendRequestNotFoundException("sender_id", senderId.toString());
         }
         FriendRequest request = friendRequest.get(0);
         friendRequestRepository.delete(request);
-        kafkaTemplate.send(senderId.toString(), "Friend request denied by " + recieverId);
+        kafkaTemplate.send(senderId.toString(), "Friend request denied by " + receiverId);
     }
 
     public List<User> getFriends(UUID currentUserId) {

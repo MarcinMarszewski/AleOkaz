@@ -71,7 +71,7 @@ class FriendsServiceTest {
 
     @Test
     public void shouldSendFriendRequestWhenFriendshipDoesNotExist() {
-        when(friendRequestRepository.existsBySenderIdAndRecieverId(userId, secondUserId)).thenReturn(false);
+        when(friendRequestRepository.existsBySenderIdAndReceiverId(userId, secondUserId)).thenReturn(false);
         when(friendshipRepository.existsByUserIdAndFriendId(userId, secondUserId)).thenReturn(false);
         when(friendRequestRepository.save(any(FriendRequest.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
@@ -80,13 +80,13 @@ class FriendsServiceTest {
 
         assertThat(request).isNotNull();
         assertThat(request.sender()).isEqualTo(mockUser);
-        assertThat(request.reciever()).isEqualTo(mockSecondUser);
+        assertThat(request.receiver()).isEqualTo(mockSecondUser);
         verify(friendRequestRepository).save(any(FriendRequest.class));
     }
 
     @Test
     public void shouldNotSendFriendRequestWhenSameUser() {
-        when(friendRequestRepository.existsBySenderIdAndRecieverId(userId, userId)).thenReturn(false);
+        when(friendRequestRepository.existsBySenderIdAndReceiverId(userId, userId)).thenReturn(false);
         when(friendshipRepository.existsByUserIdAndFriendId(userId, userId)).thenReturn(false);
 
         try {
@@ -99,7 +99,7 @@ class FriendsServiceTest {
 
     @Test
     public void shouldThrowWhenFriendRequestAlreadyExists() {
-        when(friendRequestRepository.existsBySenderIdAndRecieverId(userId, secondUserId)).thenReturn(true);
+        when(friendRequestRepository.existsBySenderIdAndReceiverId(userId, secondUserId)).thenReturn(true);
         try {
             friendsService.sendFriendRequest(userId, secondUserId);
         } catch (IllegalArgumentException e) {
@@ -121,7 +121,7 @@ class FriendsServiceTest {
 
     @Test
     void shouldCancelFriendRequestWhenExists() {
-        when(friendRequestRepository.findAllByRecieverIdAndSenderId(userId, secondUserId))
+        when(friendRequestRepository.findAllByReceiverIdAndSenderId(userId, secondUserId))
                 .thenReturn(List.of(new FriendRequest(mockUser, mockSecondUser)));
 
         friendsService.cancelFriendRequest(userId, secondUserId);
@@ -131,12 +131,12 @@ class FriendsServiceTest {
 
     @Test
     public void shouldThrowWhenCancelingNonExistentFriendRequest() {
-        when(friendRequestRepository.findAllByRecieverIdAndSenderId(secondUserId, userId))
+        when(friendRequestRepository.findAllByReceiverIdAndSenderId(secondUserId, userId))
                 .thenReturn(List.of());
         try {
             friendsService.cancelFriendRequest(userId, secondUserId);
         } catch (FriendRequestNotFoundException e) {
-            assertThat(e.getMessage()).isEqualTo("Friend request with field reciever_id and value "+secondUserId.toString()+" doesn't exist.");
+            assertThat(e.getMessage()).isEqualTo("Friend request with field receiver_id and value "+secondUserId.toString()+" doesn't exist.");
         }
         verify(friendRequestRepository, never()).delete(any(FriendRequest.class));
     }
@@ -144,7 +144,7 @@ class FriendsServiceTest {
 
     @Test
     public void shouldAcceptFriendRequestWhenExists() {
-        when(friendRequestRepository.findAllByRecieverIdAndSenderId(userId, secondUserId))
+        when(friendRequestRepository.findAllByReceiverIdAndSenderId(userId, secondUserId))
                 .thenReturn(List.of(new FriendRequest(mockUser, mockSecondUser)));
         when(friendshipRepository.save(any(Friendship.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
@@ -160,7 +160,7 @@ class FriendsServiceTest {
 
     @Test
     public void shouldThrowWhenAcceptingNonExistentFriendRequest() {
-        when(friendRequestRepository.findAllByRecieverIdAndSenderId(userId, secondUserId))
+        when(friendRequestRepository.findAllByReceiverIdAndSenderId(userId, secondUserId))
                 .thenReturn(List.of());
         try {
             friendsService.acceptFriendRequest(secondUserId, userId);
@@ -173,7 +173,7 @@ class FriendsServiceTest {
 
     @Test
     public void shouldDenyFriendRequestWhenExists() {
-        when(friendRequestRepository.findAllByRecieverIdAndSenderId(userId, secondUserId))
+        when(friendRequestRepository.findAllByReceiverIdAndSenderId(userId, secondUserId))
                 .thenReturn(List.of(new FriendRequest(mockSecondUser, mockUser)));
 
         friendsService.denyFriendRequest(userId, secondUserId);
@@ -183,7 +183,7 @@ class FriendsServiceTest {
     
     @Test
     public void shouldThrowWhenDenyingNonExistentFriendRequest() {
-        when(friendRequestRepository.findAllByRecieverIdAndSenderId(userId, secondUserId))
+        when(friendRequestRepository.findAllByReceiverIdAndSenderId(userId, secondUserId))
                 .thenReturn(List.of());
         try {
             friendsService.denyFriendRequest(secondUserId, userId);

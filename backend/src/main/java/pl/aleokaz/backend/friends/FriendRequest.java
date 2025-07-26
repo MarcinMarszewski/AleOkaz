@@ -21,17 +21,17 @@ public class FriendRequest {
     private User sender;
 
     @ManyToOne
-    @JoinColumn(name = "reciever_id")
-    private User reciever;
+    @JoinColumn(name = "receiver_id")
+    private User receiver;
 
-    public FriendRequest(User sender, User reciever) {
+    public FriendRequest(User sender, User receiver) {
         this.sender = sender;
-        this.reciever = reciever;
+        this.receiver = receiver;
     }
     
     public FriendDTO toFriendDTO(UUID currentUserId) {
         boolean isSender = sender.id().equals(currentUserId);
-        User other = isSender ? reciever : sender;
+        User other = isSender ? receiver : sender;
         return FriendDTO.builder()
                 .username(other.username())
                 .avatar_url(other.profilePicture())
