@@ -57,7 +57,7 @@ public class FriendsService {
     }
 
     public void cancelFriendRequest(UUID senderId, UUID receiverId) {
-        List<FriendRequest> friendRequest = friendRequestRepository.findAllByReceiverIdAndSenderId(senderId, receiverId);
+        List<FriendRequest> friendRequest = friendRequestRepository.findAllByReceiverIdAndSenderId(receiverId, senderId);
         if (friendRequest.isEmpty()) {
             throw new FriendRequestNotFoundException("receiver_id", receiverId.toString());
         }
@@ -65,7 +65,7 @@ public class FriendsService {
     }
 
     public Friendship acceptFriendRequest(UUID senderId, UUID receiverId) {
-        List<FriendRequest> friendRequest = friendRequestRepository.findAllByReceiverIdAndSenderId(senderId, receiverId);
+        List<FriendRequest> friendRequest = friendRequestRepository.findAllByReceiverIdAndSenderId(receiverId, senderId);
         if (friendRequest.isEmpty()) {
             throw new FriendRequestNotFoundException("sender_id", senderId.toString());
         }
@@ -80,13 +80,13 @@ public class FriendsService {
     }
 
     public void denyFriendRequest(UUID senderId, UUID receiverId) {
-        List<FriendRequest> friendRequest = friendRequestRepository.findAllByReceiverIdAndSenderId(senderId, receiverId);
+        List<FriendRequest> friendRequest = friendRequestRepository.findAllByReceiverIdAndSenderId(receiverId, senderId);
         if (friendRequest.isEmpty()) {
             throw new FriendRequestNotFoundException("sender_id", senderId.toString());
         }
         FriendRequest request = friendRequest.get(0);
         friendRequestRepository.delete(request);
-        kafkaTemplate.send(senderId.toString(), "Friend request denied by " + receiverId);
+        kafkaTemplate.send(senderId.toString(), "Friend request denied by " + userService.getUserById(receiverId).username());
     }
 
     public List<User> getFriends(UUID currentUserId) {
@@ -109,7 +109,7 @@ public class FriendsService {
             throw new FriendshipNotFoundException("friend_id", friendId.toString());
         }
         friendshipRepository.delete(friendship.get());
-        kafkaTemplate.send(friendId.toString(), "You have been removed from the friends list by " + currentUserId);
+        kafkaTemplate.send(friendId.toString(), "You have been removed from the friends list by " + userService.getUserById(currentUserId).username());
     }
 
     public static List<FriendDTO> usersAsFriendDtos(List<User> users) {

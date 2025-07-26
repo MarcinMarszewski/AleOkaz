@@ -51,7 +51,7 @@ public class FriendsController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/requests/recieved")
+    @GetMapping("/requests/received")
     public ResponseEntity<List<FriendDTO>> getIncomingRequests(Authentication authentication) {
         UUID currentUserId = authenticationService.getCurrentUserId(authentication);
         List<FriendRequest> incomingRequests = friendsService.getIncomingFriendRequests(currentUserId);
