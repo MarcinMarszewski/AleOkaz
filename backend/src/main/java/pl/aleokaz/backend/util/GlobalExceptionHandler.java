@@ -73,13 +73,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(403).body("Authorization error: " + ex.getMessage());
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleGeneralException(Exception ex) {
-        return ResponseEntity.status(500).body("An unexpected error occurred: " + ex.getMessage());
-    }
-
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex) {
         return ResponseEntity.status(400).body("Invalid argument: " + ex.getMessage());
+    }
+    
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleGeneralException(Exception ex) {
+        return ResponseEntity.status(500).body("An unexpected error has occured");
     }
 }
