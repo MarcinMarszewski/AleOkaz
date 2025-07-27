@@ -6,8 +6,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import pl.aleokaz.backend.user.User;
 
-//TODO: rework way friendship is represented in database
-
 @Entity
 @Table(name = "user_friends")
 @Data

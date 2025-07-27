@@ -21,7 +21,6 @@ import pl.aleokaz.backend.user.commands.RefreshCommand;
 import pl.aleokaz.backend.user.commands.RegisterCommand;
 import pl.aleokaz.backend.user.commands.UpdateInfoCommand;
 
-// TODO(michalciechan): Obsługa wyjątków.
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
