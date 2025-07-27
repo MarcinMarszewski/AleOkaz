@@ -13,7 +13,6 @@ import pl.aleokaz.backend.security.AuthenticationService;
 import java.util.List;
 import java.util.UUID;
 
-//TODO: @ControllerAdive
 @RestController
 @RequestMapping("/api/posts")
 public class PostController {

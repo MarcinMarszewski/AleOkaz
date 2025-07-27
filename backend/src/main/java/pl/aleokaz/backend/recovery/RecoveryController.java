@@ -11,7 +11,6 @@ import pl.aleokaz.backend.recovery.commands.RecoveryCommand;
 import pl.aleokaz.backend.recovery.commands.ResetPasswordCommand;
 import pl.aleokaz.backend.util.ResponseMsgDTO;
 
-//TODO: Add error handling with @ControllerAdvice
 @RestController
 @RequestMapping("/api/recovery")
 public class RecoveryController {

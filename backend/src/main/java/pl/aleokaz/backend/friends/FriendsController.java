@@ -19,7 +19,6 @@ import pl.aleokaz.backend.security.AuthenticationService;
 import pl.aleokaz.backend.user.User;
 import pl.aleokaz.backend.user.UserService;
 
-//TODO: Add error handling with @ControllerAdvice
 @RestController
 @RequestMapping("/api/friends")
 public class FriendsController {

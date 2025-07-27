@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-//TODO: Add error handling with @ControllerAdvice
 @RestController
 @RequestMapping("/api/comment")
 public class CommentController {
