@@ -147,7 +147,7 @@ public class UserService {
         User user = getUserByUsername(username);
 
         final PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        if (user == null || !passwordEncoder.matches(password.toString(), user.password())) {
+        if (user == null || !passwordEncoder.matches(String.valueOf(password), user.password())) {
             throw new IllegalArgumentException("Invalid username or password");
         }
 
