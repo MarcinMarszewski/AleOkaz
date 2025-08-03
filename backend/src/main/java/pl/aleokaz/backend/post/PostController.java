@@ -7,6 +7,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import pl.aleokaz.backend.post.commands.PostCommand;
 import pl.aleokaz.backend.security.AuthenticationService;
 
@@ -21,6 +23,8 @@ public class PostController {
 
     @Autowired
     private PostService postService;
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @GetMapping
     public ResponseEntity<List<PostDTO>> getAllPosts(Authentication authentication, @RequestParam(name = "userId", required = false) UUID authorId) {
@@ -41,9 +45,17 @@ public class PostController {
     }
 
     @PostMapping(consumes = "multipart/form-data")
-    public ResponseEntity<PostDTO> createPost(Authentication authentication, @RequestPart("post") PostCommand post, @RequestParam(value = "image", required = true) MultipartFile image) {
+    public ResponseEntity<PostDTO> createPost(Authentication authentication, @RequestPart("post") String post, @RequestPart(value = "image", required = true) MultipartFile image) {
         UUID currentUserId = authenticationService.getCurrentUserId(authentication);
-        Post createdPost = postService.createPost(currentUserId, post, image);
+        PostCommand postCommand;
+        Post createdPost;
+        try {
+            postCommand = objectMapper.readValue(post, PostCommand.class);
+            createdPost = postService.createPost(currentUserId, postCommand, image);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         if (createdPost == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(createdPost.asPostDTO(), HttpStatus.CREATED);

@@ -58,6 +58,7 @@ public class Post extends Interaction {
                 .createdAt(createdAt())
                 .editedAt(editedAt())
                 .authorId(author().id())
+                .fishingSpotId(fishingSpot.id())
                 .reactions(ReactionService.reactionsAsReactionsDto(reactions(), author()))
                 .comments(comments)
                 .build();

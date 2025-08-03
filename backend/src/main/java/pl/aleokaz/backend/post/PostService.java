@@ -53,16 +53,16 @@ public class PostService {
     }
 
     public Post createPost(@NonNull UUID userId, PostCommand postCommand, MultipartFile image)
-            throws ImageSaveException {
+            throws IOException {
         User author = userService.getUserById(userId);
         FishingSpot fishingSpot = fishingSpotService.getFishingSpotById(postCommand.fishingSpotId());
 
         String imageUrl;
-        try {
+        //try {
             imageUrl = imageService.saveImage(image);
-        } catch (IOException e) {
-            throw new ImageSaveException();
-        }
+        //} catch (IOException e) {
+        //    throw new ImageSaveException();
+        //}
 
         final var post = Post.builder()
                 .content(postCommand.content())

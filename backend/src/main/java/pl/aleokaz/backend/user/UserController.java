@@ -30,9 +30,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> findUserById(@PathVariable UUID id) {
-        User user = userService.getUserById(id);
+    @GetMapping("/{username}")
+    public ResponseEntity<UserDTO> findUserByUsername(@PathVariable String username) {
+        User user = userService.getUserByUsername(username);
         if (user == null)
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         return new ResponseEntity<>(user.asUserDTO(), HttpStatus.OK);

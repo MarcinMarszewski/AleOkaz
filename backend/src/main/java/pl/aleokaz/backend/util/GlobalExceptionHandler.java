@@ -80,6 +80,7 @@ public class GlobalExceptionHandler {
     
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGeneralException(Exception ex) {
+        ex.printStackTrace();
         return ResponseEntity.status(500).body("An unexpected error has occured");
     }
 }
