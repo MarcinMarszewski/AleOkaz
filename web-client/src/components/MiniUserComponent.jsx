@@ -26,7 +26,6 @@ export default function MiniUserComponent({ userId }) {
                     "Content-Type": "application/json",
                 }
             }, navigate);
-            console.log(res);
 
             if (res.status === 200) {
                 setUser(await res.json());
