@@ -20,7 +20,7 @@ export default function UserProfileComponent({ userId, isMe = true }) {
 
         let url = "http://localhost:8080/api/users/info";
         if (!isMe) {
-            url += + "/" + userId;
+            url += "/" + userId;
         }
 
         try {
