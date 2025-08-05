@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import FishingSpotComponent from "../components/FishingSpotComponent";
 import CreateFishingSpotComponent from "../components/CreateFishingSpotComponent";
 import { fetchWithAuth } from "../services/fetchWithAuth";
+import backend_url from "../services/backend";
 
 export default function FishingSpotsPage() {
     const [fishingSpotItems, setFishingSpotItems] = useState(null);
@@ -19,7 +20,7 @@ export default function FishingSpotsPage() {
         setFishingSpotItems(null);
 
         try {
-            const res = await fetchWithAuth("http://localhost:8080/api/fishingspots/all", {
+            const res = await fetchWithAuth(`${backend_url()}/fishingspots/all`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",

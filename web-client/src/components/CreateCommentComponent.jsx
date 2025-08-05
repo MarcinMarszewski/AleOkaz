@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { fetchWithAuth } from "../services/fetchWithAuth";
+import backend_url from "../services/backend";
 
 import './CreateCommentComponent.css';
 
@@ -19,7 +20,7 @@ export default function CreateCommentComponent({ parentId }) {
         };
 
         try {
-            const res = await fetchWithAuth("http://localhost:8080/api/comments/" + parentId, {
+            const res = await fetchWithAuth(`${backend_url()}/comments/${parentId}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import ListPostsComponent from "../components/ListPostsComponent";
 import UserProfileComponent from "../components/UserProfileComponent";
 import { fetchWithAuth } from "../services/fetchWithAuth";
+import backend_url from "../services/backend";
 
 export default function UserPosts() {
     const { userIdParam } = useParams();
@@ -20,7 +21,7 @@ export default function UserPosts() {
         setUserPostItems([]);
 
         try {
-            const res = await fetchWithAuth("http://localhost:8080/api/posts/all", {
+            const res = await fetchWithAuth(`${backend_url()}/posts/all`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",

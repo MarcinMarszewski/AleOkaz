@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { fetchWithAuth } from "../services/fetchWithAuth";
+import backend_url from "../services/backend";
 
 import './UserProfileComponent.css';
 
@@ -18,7 +19,7 @@ export default function UserProfileComponent({ userId }) {
         setError(null);
         setUser(null);
 
-        let url = "http://localhost:8080/api/users/info";
+        let url = `${backend_url()}/users/info`;
         if (userId) {
             url = `${url}/${userId}`;
         }

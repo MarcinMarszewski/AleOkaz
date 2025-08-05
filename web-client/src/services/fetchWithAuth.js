@@ -1,3 +1,5 @@
+import backend_url from "./backend";
+
 export async function fetchWithAuth(url, options = {}, navigate) {
     let accessToken = localStorage.getItem("accessToken");
     let refreshToken = localStorage.getItem("refreshToken");
@@ -19,7 +21,7 @@ export async function fetchWithAuth(url, options = {}, navigate) {
         throw new Error(errData.message || errData.error || "Request failed");
     }
 
-    const refreshRes = await fetch("http://localhost:8080/api/users/refresh", {
+    const refreshRes = await fetch(`${backend_url()}/users/refresh`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -41,7 +43,7 @@ export async function fetchWithAuth(url, options = {}, navigate) {
 
 
 export async function authenticate(username, password) {
-    const res = await fetch("http://localhost:8080/api/users/login", {
+    const res = await fetch(`${backend_url()}/users/login`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

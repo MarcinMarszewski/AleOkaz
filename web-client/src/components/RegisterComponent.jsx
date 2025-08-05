@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
+import backend_url from "../services/backend";
+
 import "./RegisterComponent.css";
 
 export default function RegisterComponent() {
@@ -11,7 +13,7 @@ export default function RegisterComponent() {
 
     const registerUser = async () => {
         try {
-            const res = await fetch("http://localhost:8080/api/users/register", {
+            const res = await fetch(`${backend_url()}/users/register`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

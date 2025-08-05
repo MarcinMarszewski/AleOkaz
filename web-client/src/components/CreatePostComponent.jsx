@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { fetchWithAuth } from "../services/fetchWithAuth";
+import backend_url from "../services/backend";
 
 import './CreatePostComponent.css';
 
@@ -25,7 +26,7 @@ export default function CreatePostSpotComponent({ fishingSpotId }) {
         }
 
         try {
-            await fetchWithAuth("http://localhost:8080/api/posts", {
+            await fetchWithAuth(`${backend_url()}/posts`, {
                 method: "POST",
                 body: formData,
             }, navigate);

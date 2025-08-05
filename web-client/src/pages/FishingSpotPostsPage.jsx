@@ -6,6 +6,7 @@ import CreatePostComponent from "../components/CreatePostComponent";
 import ListPostsComponent from "../components/ListPostsComponent";
 
 import { fetchWithAuth } from "../services/fetchWithAuth";
+import backend_url from "../services/backend";
 
 export default function FishingSpotPostsPage() {
     const { fishingSpotId } = useParams();
@@ -25,7 +26,7 @@ export default function FishingSpotPostsPage() {
         setFishingSpot(null);
 
         try {
-            const res = await fetchWithAuth(`http://localhost:8080/api/posts/fishing-spot/` + fishingSpotId, {
+            const res = await fetchWithAuth(`${backend_url()}/posts/fishing-spot/${fishingSpotId}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -41,7 +42,7 @@ export default function FishingSpotPostsPage() {
 
     const fetchFishingSpot = async () => {
         try {
-            const res = await fetchWithAuth(`http://localhost:8080/api/fishingspots/id/${fishingSpotId}`, {
+            const res = await fetchWithAuth(`${backend_url()}/fishingspots/id/${fishingSpotId}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",

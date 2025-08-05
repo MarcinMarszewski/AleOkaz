@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { fetchWithAuth } from "../services/fetchWithAuth";
+import backend_url from "../services/backend";
 
 import './CreateFishingSpotComponent.css';
 
@@ -24,7 +25,7 @@ export default function CreateFishingSpotComponent() {
         formData.append("longitude", longitude);
 
         try {
-            const res = await fetchWithAuth("http://localhost:8080/api/fishingspots", {
+            const res = await fetchWithAuth(`${backend_url}/fishingspots`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
