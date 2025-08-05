@@ -25,7 +25,7 @@ export default function CreateFishingSpotComponent() {
         formData.append("longitude", longitude);
 
         try {
-            const res = await fetchWithAuth(`${backend_url}/fishingspots`, {
+            const res = await fetchWithAuth(`${backend_url()}/fishingspots`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

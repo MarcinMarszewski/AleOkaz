@@ -22,7 +22,7 @@ export default function RegisterComponent() {
             });
             navigate("/login");
         } catch (err) {
-            console.error(err.message || "Registration failed");
+            setError(err.message || "Registration failed");
         }
     };
 
