@@ -1,7 +1,7 @@
 export default function ReactionsComponent({ reactions }) {
     return (
         <div className="reactions-component-container">
-            <p className="rections-likes">
+            <p className="reactions-likes">
                 {reactions.likes} Likes
             </p>
             <p className="reactions-wows">

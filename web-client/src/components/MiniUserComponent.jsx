@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { UNSAFE_useFogOFWarDiscovery, useNavigate, useRevalidator } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { fetchWithAuth } from "../services/fetchWithAuth";
 

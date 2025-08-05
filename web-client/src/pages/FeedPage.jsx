@@ -1,4 +1,4 @@
-export function FeedPage() {
+export default function FeedPage() {
     return (
         <div className="feed-page-container">
             <h1>Feed</h1>

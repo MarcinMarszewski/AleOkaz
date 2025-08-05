@@ -5,22 +5,22 @@ import { fetchWithAuth } from "../services/fetchWithAuth";
 
 import './UserProfileComponent.css';
 
-export default function UserProfileComponent({ userId, isMe = true }) {
+export default function UserProfileComponent({ userId }) {
     const [user, setUser] = useState(null);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
         loadUserInfo();
-    }, [isMe]);
+    }, [userId]);
 
     const loadUserInfo = async () => {
         setError(null);
         setUser(null);
 
         let url = "http://localhost:8080/api/users/info";
-        if (!isMe) {
-            url += "/" + userId;
+        if (userId) {
+            url = `${url}/${userId}`;
         }
 
         try {
@@ -47,7 +47,6 @@ export default function UserProfileComponent({ userId, isMe = true }) {
                     <div className="user-profile-details">
                         <h2>Profile Details</h2>
                         <p>Username: {user.username}</p>
-                        <p>Email: {user.email}</p>
                         <img src={user.profilePicture} alt="Profile" className="user-profile-picture" />
                     </div>
                 </div>}

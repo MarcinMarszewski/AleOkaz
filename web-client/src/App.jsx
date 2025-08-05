@@ -54,7 +54,7 @@ function App() {
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/register" element={<RegisterPage />} />
                     <Route path="/user-profile" element={<UserProfilePage isMe={true} />} />
-                    <Route path="/user-profile/:usernameParam" element={<UserProfilePage />} />
+                    <Route path="/user-profile/:userIdParam" element={<UserProfilePage />} />
                     <Route path="/fishing-spots" element={<FishingSpotsPage />} />
                     <Route path="/fishing-spots/:fishingSpotId/posts" element={<FishingSpotPostsPage />} />
                 </Routes>

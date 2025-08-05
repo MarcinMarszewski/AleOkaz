@@ -6,22 +6,20 @@ import UserProfileComponent from "../components/UserProfileComponent";
 import { fetchWithAuth } from "../services/fetchWithAuth";
 
 export default function UserPosts() {
-    const { usernameParam } = useParams();
-    const [isMe, setIsMe] = useState(true);
+    const { userIdParam } = useParams();
     const [userPostItems, setUserPostItems] = useState([]);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
         loadPosts();
-    }, [usernameParam]);
+    }, []);
 
     const loadPosts = async () => {
         setError(null);
         setUserPostItems([]);
 
         try {
-            setIsMe(usernameParam !== null);
             const res = await fetchWithAuth("http://localhost:8080/api/posts/all", {
                 method: "GET",
                 headers: {
@@ -39,7 +37,7 @@ export default function UserPosts() {
 
     return (
         <div className="user-profile-page-container">
-            <UserProfileComponent username={usernameParam} isMe={isMe} />
+            <UserProfileComponent userId={userIdParam}/>
             <h1>User Posts</h1>
             <div>
                 {error && <p>{error}</p>}
