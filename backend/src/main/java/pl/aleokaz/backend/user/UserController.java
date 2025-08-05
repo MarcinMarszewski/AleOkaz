@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import pl.aleokaz.backend.security.AuthenticationService;
 import pl.aleokaz.backend.security.LoginResponse;
 import pl.aleokaz.backend.security.RefreshResponse;
@@ -29,6 +33,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @GetMapping("/name/{username}")
     public ResponseEntity<UserDTO> findUserByUsername(@PathVariable String username) {
@@ -88,10 +94,12 @@ public class UserController {
     @PutMapping(path="/info", consumes = "multipart/form-data")
     public ResponseEntity<UserDTO> updateUserInfo(
                 Authentication authentication,
-                @RequestPart(value = "userInfo", required = false) UpdateInfoCommand updateInfoCommand,
-                @RequestParam(value = "image", required = false) MultipartFile image) {
+                @RequestPart("userInfo") String updateInfoCommand,
+                @RequestPart(value = "image", required = false) MultipartFile image)
+                throws JsonProcessingException, JsonMappingException {
         UUID currentUserId = authenticationService.getCurrentUserId(authentication);
-        User user = userService.updateUserInfo(currentUserId, updateInfoCommand, image);
+        UpdateInfoCommand command = objectMapper.readValue(updateInfoCommand, UpdateInfoCommand.class);
+        User user = userService.updateUserInfo(currentUserId, command, image);
         if (user == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(user.asUserDTO(), HttpStatus.OK);

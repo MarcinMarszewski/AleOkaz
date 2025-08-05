@@ -17,7 +17,7 @@ public class RecoveryController {
     @Autowired
     private RecoveryService recoveryService;
 
-    @PostMapping("/generate")
+/*     @PostMapping("/generate")
     public ResponseEntity<ResponseMsgDTO> createAndSendRecoveryToken(@RequestBody RecoveryCommand recoveryCommand) {
         recoveryService.createAndSendRecoveryToken(recoveryCommand.email());
         return ResponseEntity.ok().body(ResponseMsgDTO.builder().message("Recovery code sent.").build());
@@ -27,5 +27,5 @@ public class RecoveryController {
     public ResponseEntity<ResponseMsgDTO> resetPassword(@RequestBody ResetPasswordCommand resetPasswordCommand) {
         recoveryService.resetPassword(resetPasswordCommand);
         return ResponseEntity.ok().body(ResponseMsgDTO.builder().message("Password reset.").build());
-    }
+    } */
 }

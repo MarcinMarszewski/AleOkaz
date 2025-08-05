@@ -53,9 +53,6 @@ public class UserService {
     @Autowired
     private ImageService imageService;
 
-    @Autowired
-    private MailingService mailingService;
-
     public UserService(@NonNull UserRepository userRepository,
                        @NonNull VerificationRepository verificationRepository,
                        @NonNull JwtTokenProvider jwtTokenProvider,

@@ -7,11 +7,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import pl.aleokaz.backend.post.commands.PostCommand;
 import pl.aleokaz.backend.security.AuthenticationService;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,7 +29,7 @@ public class PostController {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<PostDTO>> getAllPosts(Authentication authentication, @RequestParam(name = "userId", required = false) UUID authorId) {
         UUID userId = authenticationService.getCurrentUserId(authentication);
         List<Post> posts = postService.getPostsByAuthorId(authorId == null ? userId : authorId);
@@ -35,7 +38,7 @@ public class PostController {
         return new ResponseEntity<>(postService.postsAsPostDtos(posts), HttpStatus.OK);
     }
 
-    @GetMapping("/{postId}")
+    @GetMapping("/id/{postId}")
     public ResponseEntity<PostDTO> getPost(Authentication authentication, @PathVariable UUID postId) {
         UUID userId = authenticationService.getCurrentUserId(authentication); //User is ignored for now, can be used for visibility later
         Post post = postService.getPostByPostId(postId);
@@ -45,17 +48,11 @@ public class PostController {
     }
 
     @PostMapping(consumes = "multipart/form-data")
-    public ResponseEntity<PostDTO> createPost(Authentication authentication, @RequestPart("post") String post, @RequestPart(value = "image", required = true) MultipartFile image) {
+    public ResponseEntity<PostDTO> createPost(Authentication authentication, @RequestPart("post") String post, @RequestPart(value = "image", required = true) MultipartFile image) 
+            throws JsonProcessingException, JsonMappingException, IOException {
         UUID currentUserId = authenticationService.getCurrentUserId(authentication);
-        PostCommand postCommand;
-        Post createdPost;
-        try {
-            postCommand = objectMapper.readValue(post, PostCommand.class);
-            createdPost = postService.createPost(currentUserId, postCommand, image);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        PostCommand postCommand = objectMapper.readValue(post, PostCommand.class);
+        Post createdPost = postService.createPost(currentUserId, postCommand, image);
         if (createdPost == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(createdPost.asPostDTO(), HttpStatus.CREATED);
