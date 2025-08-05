@@ -1,6 +1,6 @@
 export async function fetchWithAuth(url, options = {}, navigate) {
-    let accessToken = await localStorage.getItem("accessToken");
-    let refreshToken = await localStorage.getItem("refreshToken");
+    let accessToken = localStorage.getItem("accessToken");
+    let refreshToken = localStorage.getItem("refreshToken");
 
     let opts = { ...options };
     opts.headers = {
@@ -33,7 +33,7 @@ export async function fetchWithAuth(url, options = {}, navigate) {
     }
 
     const refreshData = await refreshRes.json();
-    await localStorage.setItem("accessToken", refreshData.accessToken);
+    localStorage.setItem("accessToken", refreshData.accessToken);
 
     opts.headers["Authorization"] = `Bearer ${refreshData.accessToken}`;
     return fetch(url, opts);
@@ -54,8 +54,8 @@ export async function authenticate(username, password) {
     }
 
     const data = await res.json();
-    await localStorage.setItem("accessToken", data.accessToken);
-    await localStorage.setItem("refreshToken", data.refreshToken);
+    localStorage.setItem("accessToken", data.accessToken);
+    localStorage.setItem("refreshToken", data.refreshToken);
     window.dispatchEvent(new Event('authChange'));
 }
 
