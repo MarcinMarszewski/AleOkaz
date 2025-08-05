@@ -6,7 +6,7 @@ import backend_url from "../services/backend";
 
 import './CreatePostComponent.css';
 
-export default function CreatePostSpotComponent({ fishingSpotId }) {
+export default function CreatePostComponent({ fishingSpotId }) {
     const [content, setContent] = useState("");
     const [image, setImage] = useState(null);
     const [error, setError] = useState(null);

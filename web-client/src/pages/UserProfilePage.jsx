@@ -6,7 +6,7 @@ import UserProfileComponent from "../components/UserProfileComponent";
 import { fetchWithAuth } from "../services/fetchWithAuth";
 import backend_url from "../services/backend";
 
-export default function UserPosts() {
+export default function UserProfilePage() {
     const { userIdParam } = useParams();
     const [userPostItems, setUserPostItems] = useState([]);
     const [error, setError] = useState(null);
