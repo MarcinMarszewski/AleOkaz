@@ -80,14 +80,6 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException("id", id.toString()));
     }
 
-    public User getUserByEmail(@NonNull String email) {
-        User user = userRepository.findByEmail(email);
-        if (user == null) {
-            throw new UserNotFoundException("email", email);
-        }
-        return user;
-    }
-
     public User setUserPassword(@NonNull User user, @NonNull String password) {
         final var passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
         final var encodedPassword = passwordEncoder.encode(String.valueOf(password));
@@ -97,19 +89,10 @@ public class UserService {
 
     @PreAuthorize("permitAll()")
     public User registerUser(@NonNull String username,
-                             @NonNull String email,
                              @NonNull char[] password) {
         if (userRepository.existsByUsername(username)) {
             throw new UserExistsException("username", username);
         }
-
-        if (userRepository.existsByEmail(email)) {
-            // TODO(michalciechan): Zwrócić OK i wysłać emaila, że ktoś próbował
-            // się zarejestrować? Na tę chwilę wyciekają informacje o tym kto ma
-            // u nas konto.
-            throw new UserExistsException("email", email);
-        }
-
         // TODO(michalciechan): Minimalna entropia hasła?
 
         PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
@@ -121,7 +104,6 @@ public class UserService {
         Set<UserRole> roles = new HashSet<>(Arrays.asList(UserRole.UNVERIFIED_USER));
         var user = User.builder()
                 .username(username)
-                .email(email)
                 .password(encodedPassword)
                 .roles(roles)
                 .profilePicture(defaultProfilePicture)
@@ -135,8 +117,6 @@ public class UserService {
                 .code(verificationCode)
                 .build();
         verificationRepository.save(verification);
-
-        mailingService.sendEmail(email, "AleOkaz account verification code", verificationCode);
 
         return user;
     }

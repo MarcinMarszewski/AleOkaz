@@ -3,15 +3,16 @@ import { useNavigate } from "react-router-dom";
 
 import { fetchWithAuth } from "../services/fetchWithAuth";
 
-export default function CreatePostSpotComponent() {
+import './CreatePostComponent.css';
+
+export default function CreatePostSpotComponent({ fishingSpotId }) {
     const [content, setContent] = useState("");
     const [image, setImage] = useState(null);
-    const [fishingSpotId, setFishingSpotId] = useState("");
     const [error, setError] = useState(null);
+    const [showForm, setShowForm] = useState(false);
     const navigate = useNavigate();
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleSubmit = async () => {
         setError(null);
 
         const formData = new FormData();
@@ -19,52 +20,67 @@ export default function CreatePostSpotComponent() {
             content,
             fishingSpotId,
         })], { type: "application/json" }));
-        console.log(formData);
         if (image) {
             formData.append("image", image);
         }
 
         try {
-            const res = await fetchWithAuth("http://localhost:8080/api/posts", {
+            await fetchWithAuth("http://localhost:8080/api/posts", {
                 method: "POST",
                 body: formData,
             }, navigate);
 
             window.location.reload();
         } catch (err) {
-            setError(err.message || "Creating fishing spot failed");
+            setError(err.message || "Creating post failed");
         }
-    }
+    };
 
     return (
-        <div className="p-4 max-w-sm mx-auto">
-            <h1 className="text-xl font-bold mb-4">Create Fishing Spot</h1>
-            <form onSubmit={handleSubmit} className="space-y-4">
-                <input
-                    type="text"
-                    placeholder="Content"
-                    value={content}
-                    required
-                    onChange={(e) => setContent(e.target.value)}
-                    className="w-full border p-2 rounded"
-                />
-                <input
-                    type="text"
-                    placeholder="Fishing Spot ID"
-                    value={fishingSpotId}
-                    required
-                    onChange={(e) => setFishingSpotId(e.target.value)}
-                    className="w-full border p-2 rounded"
-                />
-                <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => setImage(e.target.files[0])}
-                    className="w-full border p-2 rounded"
-                />
-                {error && <p className="text-red-600">{error}</p>}
-                <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded">Create Post</button>
-            </form>
+        <div className="create-post-component-container">
+            <div
+                onClick={() => setShowForm(!showForm)}
+                className="create-post-toggle"
+            >
+                {showForm ? "Cancel" : "Create Post"}
+            </div>
+            {showForm && (
+                <div className="create-post-form">
+                    <textarea
+                        placeholder="Content"
+                        value={content}
+                        required
+                        onChange={(e) => setContent(e.target.value)}
+                        onInput={e => {
+                            e.target.style.height = "auto";
+                            e.target.style.height = e.target.scrollHeight + "px";
+                        }}
+                        className="post-content-input"
+                    />
+                    <label htmlFor="post-image-upload" className="post-image-label">
+                        {image ? `Selected: ${image.name}` : "Choose image"}
+                    </label>
+                    <input
+                        id="post-image-upload"
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                            setImage(e.target.files[0]);
+                        }}
+                        className="post-image-input"
+                        style={{ display: "none" }}
+                    />
+                    {image && (
+                        <img
+                            src={URL.createObjectURL(image)}
+                            alt="Preview"
+                            className="post-image-preview" 
+                        />
+                    )}
+                    {error && <p className="error">{error}</p>}
+                    <button onClick={() => handleSubmit()} className="post-submit-button">Create Post</button>
+                </div>
+            )}
         </div>
     );
 }

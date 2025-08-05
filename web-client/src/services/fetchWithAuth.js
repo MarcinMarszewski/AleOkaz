@@ -1,6 +1,6 @@
 export async function fetchWithAuth(url, options = {}, navigate) {
-    let accessToken = localStorage.getItem("accessToken");
-    let refreshToken = localStorage.getItem("refreshToken");
+    let accessToken = await localStorage.getItem("accessToken");
+    let refreshToken = await localStorage.getItem("refreshToken");
 
     let opts = { ...options };
     opts.headers = {
@@ -28,14 +28,12 @@ export async function fetchWithAuth(url, options = {}, navigate) {
     });
 
     if (!refreshRes.ok) {
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
-        navigate("/login");
+        logout(navigate);
         return;
     }
 
     const refreshData = await refreshRes.json();
-    localStorage.setItem("accessToken", refreshData.accessToken);
+    await localStorage.setItem("accessToken", refreshData.accessToken);
 
     opts.headers["Authorization"] = `Bearer ${refreshData.accessToken}`;
     return fetch(url, opts);
@@ -56,6 +54,14 @@ export async function authenticate(username, password) {
     }
 
     const data = await res.json();
-    localStorage.setItem("accessToken", data.accessToken);
-    localStorage.setItem("refreshToken", data.refreshToken);
+    await localStorage.setItem("accessToken", data.accessToken);
+    await localStorage.setItem("refreshToken", data.refreshToken);
+    window.dispatchEvent(new Event('authChange'));
+}
+
+export async function logout(navigate) {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    window.dispatchEvent(new Event('authChange'));
+    navigate("/login");
 }

@@ -15,9 +15,5 @@ class RegisterCommand {
 
         @NonNull
         @NotBlank
-        private String email;
-
-        @NonNull
-        @NotBlank
         private char[] password;
 }

@@ -76,4 +76,13 @@ public class PostController {
         postService.deletePost(currentUserId, postId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @GetMapping("/fishing-spot/{fishingSpotId}")
+    public ResponseEntity<List<PostDTO>> getPostsByFishingSpotId(Authentication authentication, @PathVariable UUID fishingSpotId) {
+        UUID currentUserId = authenticationService.getCurrentUserId(authentication);
+        List<Post> posts = postService.getPostsByFishingSpotId(fishingSpotId, currentUserId);
+        if (posts == null || posts.isEmpty())
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(postService.postsAsPostDtos(posts), HttpStatus.OK);
+    }
 }

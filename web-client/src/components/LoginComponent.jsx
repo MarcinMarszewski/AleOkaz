@@ -1,7 +1,9 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 import { authenticate } from "../services/fetchWithAuth";
+
+import "./LoginComponent.css";
 
 
 export default function LoginComponent() {
@@ -10,10 +12,8 @@ export default function LoginComponent() {
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
-    const handleLogin = async (e) => {
-        e.preventDefault();
+    const handleLogin = async () => {
         setError(null);
-
         try {
             await authenticate(username, password);
             navigate("/user-profile");
@@ -23,16 +23,16 @@ export default function LoginComponent() {
     };
 
     return (
-        <div>
-            <h1 className="text-xl font-bold mb-4">Login</h1>
-            <form onSubmit={handleLogin} className="space-y-4">
+        <div className="login-component-container">
+            <h1>Login</h1>
+            <div className="login-form">
                 <input
                     type="text"
                     placeholder="Username"
                     value={username}
                     required
                     onChange={(e) => setUsername(e.target.value)}
-                    className="w-full border p-2 rounded"
+                    className="login-username-input"
                 />
                 <input
                     type="password"
@@ -40,16 +40,17 @@ export default function LoginComponent() {
                     value={password}
                     required
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full border p-2 rounded"
+                    className="login-password-input"
                 />
-                {error && <p className="text-red-600">{error}</p>}
+                {error && <p>{error}</p>}
                 <button
-                    type="submit"
-                    className="w-full bg-blue-600 text-white py-2 rounded"
+                    onClick={() => handleLogin()} 
+                    className="login-button"
                 >
                     Log In
                 </button>
-            </form>
+            </div>
+            <div className="register-link"><Link to="/register">Don't have an account? Register here</Link></div>
         </div>
     );
 }

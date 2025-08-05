@@ -9,7 +9,6 @@ import lombok.NonNull;
 import pl.aleokaz.backend.fishingspot.FishingSpot;
 import pl.aleokaz.backend.fishingspot.FishingSpotService;
 import pl.aleokaz.backend.image.ImageService;
-import pl.aleokaz.backend.image.exceptions.ImageSaveException;
 import pl.aleokaz.backend.post.commands.PostCommand;
 import pl.aleokaz.backend.post.exceptions.PostNotFoundException;
 import pl.aleokaz.backend.security.AuthorizationException;
@@ -44,6 +43,10 @@ public class PostService {
     public Post getPostByPostId(UUID postId) {
         return postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFoundException("id", postId.toString()));
+    }
+
+    public List<Post> getPostsByFishingSpotId(UUID fishingSpotId, UUID userId) {
+        return postRepository.findByFishingSpotId(fishingSpotId);
     }
 
     public List<PostDTO> postsAsPostDtos(List<Post> posts) {

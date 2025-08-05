@@ -295,4 +295,8 @@
             <column name="fishing_spot_id" type="uuid"></column>
         </addColumn>
     </changeSet>
+
+    <changeSet id="12" author="your-name">
+        <dropColumn tableName="user" columnName="email"/>
+    </changeSet>
 </databaseChangeLog>

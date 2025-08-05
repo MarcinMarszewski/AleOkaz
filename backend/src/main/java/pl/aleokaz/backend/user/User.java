@@ -36,10 +36,6 @@ public class User {
 
     @NonNull
     @Column(unique = true)
-    private String email;
-
-    @NonNull
-    @Column(unique = true)
     private String username;
 
     @NonNull
@@ -63,14 +59,12 @@ public class User {
     @Builder
     public User(
             UUID id,
-            @NonNull String email,
             @NonNull String username,
             @NonNull String password,
             @NonNull Set<UserRole> roles,
             @NonNull String profilePicture) {
         this.id = id;
         this.username = username;
-        this.email = email;
         this.password = password;
         this.roles = new HashSet<>(roles);
         this.profilePicture = profilePicture;
@@ -86,7 +80,6 @@ public class User {
         return UserDTO.builder()
                 .id(id)
                 .username(username)
-                .email(email)
                 .profilePicture(profilePicture)
                 .build();
     }

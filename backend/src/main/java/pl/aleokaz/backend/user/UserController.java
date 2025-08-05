@@ -30,7 +30,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/{username}")
+    @GetMapping("/name/{username}")
     public ResponseEntity<UserDTO> findUserByUsername(@PathVariable String username) {
         User user = userService.getUserByUsername(username);
         if (user == null)
@@ -38,11 +38,10 @@ public class UserController {
         return new ResponseEntity<>(user.asUserDTO(), HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<UserDTO> registerUser(@RequestBody RegisterCommand registerCommand)
             throws URISyntaxException {
         User user = userService.registerUser(registerCommand.username(),
-                registerCommand.email(),
                 registerCommand.password());
         if (user == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
