@@ -142,13 +142,11 @@ public class UserService {
     @PreAuthorize("permitAll()")
     public RefreshResponse refreshUserToken(@NonNull String refreshToken) {
         UUID userId = UUID.fromString(jwtTokenProvider.getUserIdFromToken(refreshToken));
-        System.out.println("user id: " + userId);
 
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             String accessToken = jwtTokenProvider.refreshAccessToken(refreshToken, user);
-            System.out.println("New access token: " + accessToken);
 
             RefreshResponse refreshResponse = RefreshResponse.builder()
                 .accessToken(accessToken)
