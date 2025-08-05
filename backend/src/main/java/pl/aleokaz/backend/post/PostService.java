@@ -9,7 +9,6 @@ import lombok.NonNull;
 import pl.aleokaz.backend.fishingspot.FishingSpot;
 import pl.aleokaz.backend.fishingspot.FishingSpotService;
 import pl.aleokaz.backend.image.ImageService;
-import pl.aleokaz.backend.image.exceptions.ImageSaveException;
 import pl.aleokaz.backend.post.commands.PostCommand;
 import pl.aleokaz.backend.post.exceptions.PostNotFoundException;
 import pl.aleokaz.backend.security.AuthorizationException;
@@ -46,6 +45,10 @@ public class PostService {
                 .orElseThrow(() -> new PostNotFoundException("id", postId.toString()));
     }
 
+    public List<Post> getPostsByFishingSpotId(UUID fishingSpotId, UUID userId) {
+        return postRepository.findByFishingSpotId(fishingSpotId);
+    }
+
     public List<PostDTO> postsAsPostDtos(List<Post> posts) {
         return posts.stream()
                 .map(Post::asPostDTO)
@@ -53,16 +56,16 @@ public class PostService {
     }
 
     public Post createPost(@NonNull UUID userId, PostCommand postCommand, MultipartFile image)
-            throws ImageSaveException {
+            throws IOException {
         User author = userService.getUserById(userId);
         FishingSpot fishingSpot = fishingSpotService.getFishingSpotById(postCommand.fishingSpotId());
 
         String imageUrl;
-        try {
+        //try {
             imageUrl = imageService.saveImage(image);
-        } catch (IOException e) {
-            throw new ImageSaveException();
-        }
+        //} catch (IOException e) {
+        //    throw new ImageSaveException();
+        //}
 
         final var post = Post.builder()
                 .content(postCommand.content())

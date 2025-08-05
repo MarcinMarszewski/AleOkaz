@@ -34,7 +34,7 @@ public class RecoveryService {
     @Autowired
     private MailingService mailingService;
 
-    public void createAndSendRecoveryToken(String email) {
+/*     public void createAndSendRecoveryToken(String email) {
         User user = userService.getUserByEmail(email);
 
         RecoveryToken recoveryToken = RecoveryToken.builder()
@@ -110,5 +110,5 @@ public class RecoveryService {
             token += (char) (Math.random() * 26 + 97);
         }
         return token;
-    }
+    } */
 }

@@ -35,7 +35,7 @@ public class AdminUserSeeder implements ApplicationListener<ContextRefreshedEven
         }
 
         try {
-            userService.registerUser("admin", email, password.toCharArray());
+            userService.registerUser("admin", password.toCharArray());
         } catch (UserExistsException e) {
         }
 

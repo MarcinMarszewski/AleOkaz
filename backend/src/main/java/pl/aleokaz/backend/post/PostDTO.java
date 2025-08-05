@@ -17,6 +17,7 @@ public record PostDTO(
         @NonNull Date createdAt,
         Date editedAt,
         @NonNull UUID authorId,
+        @NonNull UUID fishingSpotId,
         @NonNull ReactionsDTO reactions,
         @NonNull Set<CommentDTO> comments) {
 }

@@ -29,14 +29,14 @@ public class FriendsController {
     @Autowired
     private AuthenticationService authenticationService;
 
-    @GetMapping("/")
+    @GetMapping("/my")
     public ResponseEntity<List<FriendDTO>> getFriends(Authentication authentication) {
         UUID currentUserId = authenticationService.getCurrentUserId(authentication);
         List<User> friends = friendsService.getFriends(currentUserId);
         return new ResponseEntity<>(FriendsService.usersAsFriendDtos(friends), HttpStatus.OK);
     }
 
-    @GetMapping("/{username}")
+    @GetMapping("/username/{username}")
     public ResponseEntity<List<FriendDTO>> getFriendsOfUser(Authentication authentication, @PathVariable String username){
         UUID currentUserId = authenticationService.getCurrentUserId(authentication);
         List<User> friends = friendsService.getFriendsOfUser(username, currentUserId);
