@@ -24,10 +24,15 @@
 
 .spot-name {
     padding: 0 0.5rem;
+    width: 100%;
+    text-align: left;
 }
 
 .spot-description {
     margin-bottom: 0.5rem;
+    width: 100%;
+    text-align: left;
+    margin-left: 2rem;
 }
 
 .fishing-spot-actions {
@@ -38,11 +43,19 @@
     margin-top: 0.5rem;
 }
 
+.fishing-spot-actions>* {
+    font-weight: bold;
+    color: #555;
+}
+
+.fishing-spot-actions>*:hover {
+    color: #000;
+}
 
 .fishing-spot-bar {
     flex-direction: row;
     align-items: flex-start;
     display: flex;
     margin-bottom: 0.5rem;
-    padding: 0.5rem 0;
+    padding: 0.5rem 0 0 0;
 }

@@ -28,32 +28,32 @@ export default function RegisterComponent() {
         <div className="register-component-container">
             <h1>Register</h1>
             <div className="register-form">
-            <input
-                type="text"
-                placeholder="Username"
-                value={username}
-                required
-                onChange={(e) => setUsername(e.target.value)}
-                className="register-username-input"
-            />
-            <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                required
-                onChange={(e) => setPassword(e.target.value)}
-                className="register-password-input"
-            />
-            {error && <p className="text-red-600">{error}</p>}
-            <button
-                type="submit"
-                className="register-button"
-                onClick={()=> registerUser()}
-            >
-                Register
-            </button>
+                <input
+                    type="text"
+                    placeholder="Username"
+                    value={username}
+                    required
+                    onChange={(e) => setUsername(e.target.value)}
+                    className="register-username-input"
+                />
+                <input
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    required
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="register-password-input"
+                />
+                {error && <p className="text-red-600">{error}</p>}
+                <button
+                    type="submit"
+                    className="register-button"
+                    onClick={() => registerUser()}
+                >
+                    Register
+                </button>
             </div>
-        <div className="login-link"><Link to="/login">Already have an account? Log in here</Link></div>
+            <div className="login-link"><Link to="/login">Already have an account? Log in here</Link></div>
         </div>
-    );    
+    );
 }

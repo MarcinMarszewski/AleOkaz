@@ -25,8 +25,10 @@ export default function FishingSpotsPage() {
                     "Content-Type": "application/json",
                 }
             }, navigate);
-            const data = await res.json();
-            setFishingSpotItems(data);
+
+            if (res.status === 200) {
+                setFishingSpotItems(await res.json());
+            }
         } catch (err) {
             setError(err.message || "Loading fishing spots failed");
         }
@@ -38,7 +40,7 @@ export default function FishingSpotsPage() {
             <h1>Fishing Spots</h1>
             {error && <p>{error}</p>}
             {fishingSpotItems && fishingSpotItems.map((spot) => (
-                <FishingSpotComponent spot={spot} key={spot.id}/>
+                <FishingSpotComponent spot={spot} key={spot.id} />
             ))}
         </div>
     );

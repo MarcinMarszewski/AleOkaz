@@ -25,13 +25,12 @@ export default function FishingSpotPostsPage() {
         setFishingSpot(null);
 
         try {
-            const res = await fetchWithAuth(`http://localhost:8080/api/posts/fishing-spot/`+fishingSpotId, {
+            const res = await fetchWithAuth(`http://localhost:8080/api/posts/fishing-spot/` + fishingSpotId, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 }
             }, navigate);
-            console.log("res", res);
             if (res.status === 200) {
                 setFishingSpotPosts(await res.json());
             }
@@ -42,7 +41,7 @@ export default function FishingSpotPostsPage() {
 
     const fetchFishingSpot = async () => {
         try {
-            const res = await fetchWithAuth(`http://localhost:8080/api/fishingspots/${fishingSpotId}`, {
+            const res = await fetchWithAuth(`http://localhost:8080/api/fishingspots/id/${fishingSpotId}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",

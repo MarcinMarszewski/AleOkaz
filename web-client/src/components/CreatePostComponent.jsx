@@ -74,7 +74,7 @@ export default function CreatePostSpotComponent({ fishingSpotId }) {
                         <img
                             src={URL.createObjectURL(image)}
                             alt="Preview"
-                            className="post-image-preview" 
+                            className="post-image-preview"
                         />
                     )}
                     {error && <p className="error">{error}</p>}

@@ -49,7 +49,7 @@ export default function CreateCommentComponent({ parentId }) {
                         e.target.style.height = "auto";
                         e.target.style.height = e.target.scrollHeight + "px";
                     }}
-                    className="comment-content-input"/>
+                    className="comment-content-input" />
                 <div onClick={() => handleSubmit()} className="create-comment-submit">Submit</div>
                 {error && <p className="error">{error}</p>}
             </form>}

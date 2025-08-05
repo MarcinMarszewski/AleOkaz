@@ -1,22 +1,22 @@
 export default function ReactionsComponent({ reactions }) {
     return (
-        <div className="flex space-x-2">
-            <p className="text-sm text-gray-600">
+        <div className="reactions-component-container">
+            <p className="rections-likes">
                 {reactions.likes} Likes
             </p>
-            <p className="text-sm text-gray-600">
+            <p className="reactions-wows">
                 {reactions.wows} Wows
             </p>
-            <p className="text-sm text-gray-600">
+            <p className="reactions-hearts">
                 {reactions.hearts} Hearts
             </p>
-            <p className="text-sm text-gray-600">
+            <p className="reactions-laughs">
                 {reactions.laughs} Laughs
             </p>
-            <p className="text-sm text-gray-600">
+            <p className="reactions-fish">
                 {reactions.fish} Fish
             </p>
-            <p className="text-sm text-gray-600">
+            <p className="user-reaction">
                 Your reaction: {reactions.userReaction || "None"}
             </p>
         </div>

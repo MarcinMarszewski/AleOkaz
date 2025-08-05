@@ -22,14 +22,16 @@ export default function UserPosts() {
 
         try {
             setIsMe(usernameParam !== null);
-            const res = await fetchWithAuth("http://localhost:8080/api/posts", {
+            const res = await fetchWithAuth("http://localhost:8080/api/posts/all", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 }
             }, navigate);
-            const data = await res.json();
-            setUserPostItems(data);
+
+            if (res.status === 200) {
+                setUserPostItems(await res.json());
+            }
         } catch (err) {
             setError(err.message || "Loading profile failed");
         }
@@ -42,7 +44,7 @@ export default function UserPosts() {
             <div>
                 {error && <p>{error}</p>}
                 {userPostItems.length > 0 ? (
-                        <ListPostsComponent posts={userPostItems} />
+                    <ListPostsComponent posts={userPostItems} />
                 ) : (
                     <p>No posts available.</p>
                 )}

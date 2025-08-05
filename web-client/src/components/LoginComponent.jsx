@@ -44,7 +44,7 @@ export default function LoginComponent() {
                 />
                 {error && <p>{error}</p>}
                 <button
-                    onClick={() => handleLogin()} 
+                    onClick={() => handleLogin()}
                     className="login-button"
                 >
                     Log In

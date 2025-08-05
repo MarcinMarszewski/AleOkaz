@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { UNSAFE_useFogOFWarDiscovery, useNavigate, useRevalidator } from "react-router-dom";
 
 import { fetchWithAuth } from "../services/fetchWithAuth";
 
 import './MiniUserComponent.css';
 
 export default function MiniUserComponent({ userId }) {
-    const [username, setUsername] = useState("");
-    const [profilePicture, setProfilePicture] = useState("");
+    const [user, setUser] = useState(null);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
@@ -17,8 +16,8 @@ export default function MiniUserComponent({ userId }) {
 
     const loadUserInfo = async () => {
         setError(null);
-        setUsername("");
-        setProfilePicture("");
+        setUser(null);
+
         let url = "http://localhost:8080/api/users/info/" + userId;
         try {
             const res = await fetchWithAuth(url, {
@@ -27,10 +26,11 @@ export default function MiniUserComponent({ userId }) {
                     "Content-Type": "application/json",
                 }
             }, navigate);
+            console.log(res);
 
-            const data = await res.json();
-            setUsername(data.username);
-            setProfilePicture(data.profilePicture);
+            if (res.status === 200) {
+                setUser(await res.json());
+            }
         } catch (err) {
             setError(err.message || "Loading profile failed");
         }
@@ -38,14 +38,13 @@ export default function MiniUserComponent({ userId }) {
 
     return (
         <div className="mini-user-component-container">
-            {profilePicture && (
+            {user && (<>
                 <img
-                    src={profilePicture}
+                    src={user.profilePicture}
                     alt="Profile"
                     className="profile-picture"
                 />
-            )}
-            <span className="username">{username}</span>
+            <span className="username">{user.username}</span></>)}
         </div>
     );
 }

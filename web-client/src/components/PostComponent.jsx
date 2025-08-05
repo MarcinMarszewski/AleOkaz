@@ -8,20 +8,21 @@ import './PostComponent.css';
 
 export default function PostComponent({ post }) {
     const [showComments, setShowComments] = useState(false);
+
     return (
         <div className="post-component-container">
             <MiniUserComponent userId={post.authorId} />
             <p className="post-content">{post.content}</p>
             <img src={post.imageUrl} alt={post.title} className="post-image" />
             <div className="post-actions">
-                <CreateCommentComponent parentId={post.id} className="post-component-create-comment"/>
+                <CreateCommentComponent parentId={post.id} className="post-component-create-comment" />
             </div>
             <div className="post-comments">
                 {post.comments && post.comments.length > 0 ? (
-                <>
-                    <h3 className="toggle-comments" onClick={() => setShowComments(!showComments)}>Comments</h3>
-                    {showComments && <ListCommentsComponent comments={post.comments} parentId={post.id} />}
-                </>
+                    <>
+                        <h3 className="toggle-comments" onClick={() => setShowComments(!showComments)}>Comments</h3>
+                        {showComments && <ListCommentsComponent comments={post.comments} parentId={post.id} />}
+                    </>
                 ) : (
                     <p>No comments yet.</p>
                 )}

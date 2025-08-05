@@ -38,11 +38,11 @@
     margin-top: 0.5rem;
 }
 
-.register-link > * {
+.register-link>* {
     color: #555;
     text-decoration: none;
 }
 
-.register-link > *:hover {
+.register-link>*:hover {
     color: #222;
 }

@@ -8,7 +8,7 @@
     box-sizing: border-box;
 }
 
-.list-comments-component-container > * {
+.list-comments-component-container>* {
     width: 100%;
     box-sizing: border-box;
 }
