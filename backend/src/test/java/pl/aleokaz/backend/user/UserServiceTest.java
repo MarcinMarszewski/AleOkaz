@@ -57,13 +57,12 @@ public class UserServiceTest {
         final Set<UserRole> roles = new HashSet<>();
         roles.add(UserRole.UNVERIFIED_USER);
 
-        User saved = new User(UUID.randomUUID(), "user@example.com", "user", "", roles, "defaultProfilePicture");
+        User saved = new User(UUID.randomUUID(), "user", "", roles, "defaultProfilePicture");
         when(userRepository.save(
-                argThat(user -> user.username().equals("user") &&
-                        user.email().equals("user@example.com"))))
+                argThat(user -> user.username().equals("user"))))
                 .thenReturn(saved);
 
-        final var actual = userService.registerUser("user", "user@example.com", "".toCharArray());
+        final var actual = userService.registerUser("user", "".toCharArray());
 
         final var expected = saved.asUserDTO(); 
         assertEquals(expected, actual.asUserDTO());
@@ -80,17 +79,6 @@ public class UserServiceTest {
         when(userRepository.existsByUsername("user"))
                 .thenReturn(true);
 
-        assertThrows(UserExistsException.class, () -> userService.registerUser("user", "user@example.com", "".toCharArray()));
-    }
-
-    @Test
-    public void shouldNotRegisterUserWhenEmailIsAlreadyUsed() throws Exception {
-        final Set<UserRole> roles = new HashSet<>();
-        roles.add(UserRole.UNVERIFIED_USER);
-
-        when(userRepository.existsByEmail("user@example.com"))
-                .thenReturn(true);
-
-        assertThrows(UserExistsException.class, () -> userService.registerUser("user", "user@example.com", "".toCharArray()));
+        assertThrows(UserExistsException.class, () -> userService.registerUser("user", "".toCharArray()));
     }
 }

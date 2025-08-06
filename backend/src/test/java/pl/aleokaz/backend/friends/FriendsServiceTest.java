@@ -55,9 +55,9 @@ class FriendsServiceTest {
     public void setup() {
         userId = UUID.randomUUID();
         secondUserId = UUID.randomUUID();
-        mockUser = new User(userId, "user@mail.com", "testUser",
+        mockUser = new User(userId, "testUser",
                 "password123", new HashSet<UserRole>(), "pictureUrl");
-        mockSecondUser = new User(secondUserId, "friend@mail.com", "friendUser",
+        mockSecondUser = new User(secondUserId, "friendUser",
                 "password123", new HashSet<UserRole>(), "pictureUrl");
 
         when(userService.getUserById(userId)).thenReturn(mockUser);

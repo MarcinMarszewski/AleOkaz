@@ -36,7 +36,6 @@ public class ReactionServiceTest {
         final var author = User.builder()
                 .id(UUID.randomUUID())
                 .username("user")
-                .email("user@example.com")
                 .password("")
                 .roles(new HashSet<>())
                 .profilePicture("empty")

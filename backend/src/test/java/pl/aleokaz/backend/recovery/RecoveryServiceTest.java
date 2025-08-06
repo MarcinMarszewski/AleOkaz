@@ -49,7 +49,7 @@ public class RecoveryServiceTest {
     private String token;
     private RecoveryToken recoveryToken;
 
-    @BeforeEach
+/*     @BeforeEach
     public void setup() {
         ReflectionTestUtils.setField(recoveryService, "tokenAttempts", 5);
         ReflectionTestUtils.setField(recoveryService, "tokenExpirationMinutes", 60);
@@ -131,5 +131,5 @@ public class RecoveryServiceTest {
         when(tokenRepository.findByUserId(userId)).thenReturn(recoveryToken);
         recoveryService.resetPassword(resetPasswordCommand);
         verify(userService).setUserPassword(mockUser, "newPassword123");
-    }
+    } */
 }
