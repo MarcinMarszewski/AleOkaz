@@ -5,6 +5,7 @@ import CreateCommentComponent from "./CreateCommentComponent";
 import ListCommentsComponent from "./ListCommentsComponent";
 
 import './PostComponent.css';
+import backend_url from "../services/backend";
 
 export default function PostComponent({ post }) {
     const [showComments, setShowComments] = useState(false);
@@ -13,7 +14,7 @@ export default function PostComponent({ post }) {
         <div className="post-component-container">
             <MiniUserComponent userId={post.authorId} />
             <p className="post-content">{post.content}</p>
-            <img src={post.imageUrl} alt={post.title} className="post-image" />
+            <img src={backend_url().slice(0,-4)+post.imageUrl.slice(21)} alt={post.title} className="post-image" />
             <div className="post-actions">
                 <CreateCommentComponent parentId={post.id} className="post-component-create-comment" />
             </div>

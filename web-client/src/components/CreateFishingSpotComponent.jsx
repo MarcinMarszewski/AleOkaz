@@ -67,6 +67,10 @@ export default function CreateFishingSpotComponent() {
                         value={description}
                         required
                         onChange={(e) => setDescription(e.target.value)}
+                        onInput={(e) => {
+                            e.target.style.height = "auto";
+                            e.target.style.height = e.target.scrollHeight + "px";
+                        }}
                         className="fishing-spot-description-input"
                     />
                     <div className="fishing-spot-coordinates-inputs">

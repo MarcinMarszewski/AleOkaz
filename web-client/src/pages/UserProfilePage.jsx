@@ -19,9 +19,12 @@ export default function UserProfilePage() {
     const loadPosts = async () => {
         setError(null);
         setUserPostItems([]);
-
+        let url = `${backend_url()}/posts/all`;
+        if (userIdParam) {
+            url = `${url}?userId=${userIdParam}`;
+        }
         try {
-            const res = await fetchWithAuth(`${backend_url()}/posts/all`, {
+            const res = await fetchWithAuth(url, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",

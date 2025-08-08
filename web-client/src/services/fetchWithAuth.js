@@ -59,11 +59,24 @@ export async function authenticate(username, password) {
     localStorage.setItem("accessToken", data.accessToken);
     localStorage.setItem("refreshToken", data.refreshToken);
     window.dispatchEvent(new Event('authChange'));
+
+    const user = await fetchWithAuth(`${backend_url()}/users/info`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        }
+    });
+    if (user.status === 200) {
+        localStorage.setItem("currentUserId", (await user.json()).id);
+    } else {
+        throw new Error("Failed to fetch user info");
+    }
 }
 
 export async function logout(navigate) {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
+    localStorage.removeItem("currentUserId");
     window.dispatchEvent(new Event('authChange'));
     navigate("/login");
 }

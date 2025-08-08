@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import UpdateUserComponent from "./UpdateUserComponent";
+
 import { fetchWithAuth } from "../services/fetchWithAuth";
 import backend_url from "../services/backend";
 
@@ -48,7 +50,8 @@ export default function UserProfileComponent({ userId }) {
                     <div className="user-profile-details">
                         <h2>Profile Details</h2>
                         <p>Username: {user.username}</p>
-                        <img src={user.profilePicture} alt="Profile" className="user-profile-picture" />
+                        <img src={backend_url().slice(0,-4)+user.profilePicture.slice(21)} alt="Profile" className="user-profile-picture" />
+                        <UpdateUserComponent user={user} />
                     </div>
                 </div>}
         </>

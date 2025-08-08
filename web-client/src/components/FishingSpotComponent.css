@@ -30,9 +30,9 @@
 
 .spot-description {
     margin-bottom: 0.5rem;
-    width: 100%;
+    width: 95%;
+    margin-left: 1rem;
     text-align: left;
-    margin-left: 2rem;
 }
 
 .fishing-spot-actions {

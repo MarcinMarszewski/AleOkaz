@@ -37,10 +37,11 @@ export default function MiniUserComponent({ userId }) {
     };
 
     return (
-        <div className="mini-user-component-container">
+        <div className="mini-user-component-container"
+            onClick={() => navigate(`/user-profile/${userId}`)}>
             {user && (<>
                 <img
-                    src={user.profilePicture}
+                    src={backend_url().slice(0,-4)+user.profilePicture.slice(21)}
                     alt="Profile"
                     className="profile-picture"
                 />
